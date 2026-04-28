@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuthStore } from './store/authStore';
 import { useAuth } from './hooks/useAuth';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
@@ -28,6 +30,13 @@ const RootRedirect = () => {
 };
 
 function App() {
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+
+  // Initialize auth session from localStorage on app startup
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
+
   return (
     <Router>
       <Routes>
