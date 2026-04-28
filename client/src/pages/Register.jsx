@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 // Register page - renders register form and handles new user creation
 export const Register = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading, error, register, clearError } = useAuth();
+  const { isAuthenticated, isLoading, error, register } = useAuth();
 
   // If already logged in, redirect to dashboard
   useEffect(() => {

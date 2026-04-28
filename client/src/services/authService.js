@@ -3,45 +3,55 @@ import api from './api';
 // Register new user
 export const authService = {
   register: async (email, password, name) => {
-    const response = await api.post('/auth/register', {
-      email,
-      password,
-      name,
-    });
+    try {
+      const response = await api.post('/auth/register', {
+        email,
+        password,
+        name,
+      });
 
-    if (response.data.success) {
-      // Token is now set as HttpOnly cookie automatically
-      return response.data.data.user; // Returns { user }
+      if (response.data.success) {
+        // Token is now set as HttpOnly cookie automatically
+        return response.data.data.user;
+      }
+
+      throw new Error(response.data.message || 'Registration failed');
+    } catch (error) {
+      throw new Error(error.response?.data?.message || error.message || 'Registration failed');
     }
-
-    throw new Error(response.data.message || 'Registration failed');
   },
 
   // Login user
   login: async (email, password) => {
-    const response = await api.post('/auth/login', {
-      email,
-      password,
-    });
+    try {
+      const response = await api.post('/auth/login', {
+        email,
+        password,
+      });
 
-    if (response.data.success) {
-      // Token is now set as HttpOnly cookie automatically
-      return response.data.data.user; // Returns { user }
+      if (response.data.success) {
+        // Token is now set as HttpOnly cookie automatically
+        return response.data.data.user;
+      }
+
+      throw new Error(response.data.message || 'Login failed');
+    } catch (error) {
+      throw new Error(error.response?.data?.message || error.message || 'Login failed');
     }
-
-    throw new Error(response.data.message || 'Login failed');
   },
 
   // Get current user profile
   getProfile: async () => {
     try {
       const response = await api.get('/auth/profile');
+
       if (response.data.success) {
-        return response.data.data; // Returns user object
+        return response.data.data;
       }
+
       throw new Error(response.data.message || 'Failed to fetch profile');
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to fetch profile');
+      throw new Error(error.response?.data?.message || error.message || 'Failed to fetch profile');
     }
   },
 
