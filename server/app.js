@@ -2,17 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import authRoutes from './routes/auth.routes.js';
 
 const app = express();
 
-// ═══════════════════════════════════════════════════════════════════════════
-// MIDDLEWARE
-// ═══════════════════════════════════════════════════════════════════════════
-
-// Security middleware
+// Security & CORS middleware
 app.use(helmet());
-
-// CORS
 app.use(
   cors({
     origin: process.env.CLIENT_URL || 'http://localhost:5173',
@@ -20,18 +16,13 @@ app.use(
   })
 );
 
-// Logging
+// Logging & parsing middleware
 app.use(morgan('dev'));
-
-// Body parsing
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ limit: '10kb', extended: true }));
+app.use(cookieParser()); // Parse cookies from requests
 
-// ═══════════════════════════════════════════════════════════════════════════
-// ROUTES
-// ═══════════════════════════════════════════════════════════════════════════
-
-// Health check endpoint
+// API routes
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     success: true,
@@ -58,11 +49,10 @@ app.get('/api', (req, res) => {
   });
 });
 
-// ═══════════════════════════════════════════════════════════════════════════
-// ERROR HANDLING
-// ═══════════════════════════════════════════════════════════════════════════
+// Auth routes
+app.use('/api/auth', authRoutes);
 
-// 404 handler
+// Error handling
 app.use((req, res) => {
   res.status(404).json({
     success: false,
