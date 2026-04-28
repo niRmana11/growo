@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 
 // Protected route - redirects to login if not authenticated
 export const ProtectedRoute = ({ children }) => {
