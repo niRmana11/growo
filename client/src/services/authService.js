@@ -10,7 +10,8 @@ export const authService = {
     });
 
     if (response.data.success) {
-      return response.data.data; // Returns { token, user }
+      // Token is now set as HttpOnly cookie automatically
+      return response.data.data.user; // Returns { user }
     }
 
     throw new Error(response.data.message || 'Registration failed');
@@ -24,7 +25,8 @@ export const authService = {
     });
 
     if (response.data.success) {
-      return response.data.data; // Returns { token, user }
+      // Token is now set as HttpOnly cookie automatically
+      return response.data.data.user; // Returns { user }
     }
 
     throw new Error(response.data.message || 'Login failed');
@@ -41,10 +43,10 @@ export const authService = {
     throw new Error(response.data.message || 'Failed to fetch profile');
   },
 
-  // Logout (clear token from localStorage)
+  // Logout (cookie cleared by server)
   logout: async () => {
     try {
-      // Call backend logout endpoint (returns success message)
+      // Call backend logout endpoint (clears authToken cookie)
       const response = await api.post('/auth/logout');
       return response.data;
     } catch (error) {

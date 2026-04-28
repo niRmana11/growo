@@ -4,7 +4,8 @@ import User from '../models/User.js';
 // Verify JWT token
 export const verifyToken = (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    // Get token from HttpOnly cookie (automatically sent by browser)
+    const token = req.cookies?.authToken;
 
     if (!token) {
       return res.status(401).json({
@@ -28,7 +29,8 @@ export const verifyToken = (req, res, next) => {
 // Checks the database for current plan rather than relying on stale token claims
 export const verifyProUser = async (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    // Get token from HttpOnly cookie (automatically sent by browser)
+    const token = req.cookies?.authToken;
 
     if (!token) {
       return res.status(401).json({

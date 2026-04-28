@@ -39,18 +39,10 @@ export const useAuthStore = create((set) => ({
     try {
       set({ isLoading: true });
 
-      const token = localStorage.getItem('authToken');
-
-      // If no token, just finish loading
-      if (!token) {
-        set({ isLoading: false });
-        return;
-      }
-
-      // Token exists - verify it's still valid by fetching profile
+      // Always try to fetch profile - browser sends HttpOnly cookie automatically
+      // If valid, session is restored. If invalid, we get 401 and stay logged out.
       const userData = await authService.getProfile();
 
-      // If successful, restore user session
       set({
         user: userData,
         isAuthenticated: true,
@@ -58,9 +50,7 @@ export const useAuthStore = create((set) => ({
         isLoading: false,
       });
     } catch (err) {
-      // Token is invalid (expired, revoked, etc)
-      // Clear it and stay logged out
-      localStorage.removeItem('authToken');
+      // Cookie is invalid/expired or user not found
       set({
         user: null,
         isAuthenticated: false,

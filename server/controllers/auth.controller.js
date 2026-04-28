@@ -6,7 +6,18 @@ import User from '../models/User.js';
 // Authorization decisions are made by checking the database
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+    expiresIn: process.env.JWT_EXPIRES_IN || '1h', // Short-lived access tokens
+  });
+};
+
+// Set secure HttpOnly cookie with JWT
+const setAuthCookie = (res, token) => {
+  res.cookie('authToken', token, {
+    httpOnly: true, // Prevents JavaScript access (XSS protection)
+    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+    sameSite: 'strict', // CSRF protection
+    maxAge: 60 * 60 * 1000, // 1 hour
+    path: '/',
   });
 };
 
@@ -44,12 +55,12 @@ export const register = async (req, res) => {
     await user.save();
 
     const token = generateToken(user._id);
+    setAuthCookie(res, token);
 
     return res.status(201).json({
       success: true,
       message: 'User registered successfully',
       data: {
-        token,
         user: user.getPublicData(),
       },
     });
@@ -94,12 +105,12 @@ export const login = async (req, res) => {
     }
 
     const token = generateToken(user._id);
+    setAuthCookie(res, token);
 
     return res.status(200).json({
       success: true,
       message: 'Login successful',
       data: {
-        token,
         user: user.getPublicData(),
       },
     });
@@ -137,9 +148,16 @@ export const getProfile = async (req, res) => {
   }
 };
 
-// Logout (handled on frontend by removing token)
+// Logout (clear auth cookie)
 export const logout = async (req, res) => {
   try {
+    res.clearCookie('authToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+    });
+
     return res.status(200).json({
       success: true,
       message: 'Logout successful',

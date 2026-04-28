@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes.js';
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(
 app.use(morgan('dev'));
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ limit: '10kb', extended: true }));
+app.use(cookieParser()); // Parse cookies from requests
 
 // API routes
 app.get('/api/health', (req, res) => {

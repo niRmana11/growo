@@ -15,11 +15,9 @@ export const useAuth = () => {
       setLoading(true);
       clearError();
 
-      const { token, user: userData } = await authService.register(email, password, name);
+      const userData = await authService.register(email, password, name);
 
-      // Save token to localStorage (will be picked up by api.js interceptor)
-      localStorage.setItem('authToken', token);
-
+      // Token is now stored in HttpOnly cookie (set by server)
       // Update store with user data
       setUser(userData);
 
@@ -39,11 +37,9 @@ export const useAuth = () => {
       setLoading(true);
       clearError();
 
-      const { token, user: userData } = await authService.login(email, password);
+      const userData = await authService.login(email, password);
 
-      // Save token to localStorage
-      localStorage.setItem('authToken', token);
-
+      // Token is now stored in HttpOnly cookie (set by server)
       // Update store with user data
       setUser(userData);
 
@@ -61,18 +57,14 @@ export const useAuth = () => {
     try {
       setLoading(true);
 
-      // Call backend logout endpoint
+      // Call backend logout endpoint (clears authToken cookie)
       await authService.logout();
-
-      // Clear token from localStorage
-      localStorage.removeItem('authToken');
 
       // Clear store
       clearUser();
     } catch (err) {
       console.error('Logout error:', err);
       // Still clear on error - don't trap user
-      localStorage.removeItem('authToken');
       clearUser();
     } finally {
       setLoading(false);
