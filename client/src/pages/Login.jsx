@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 // Login page - renders login form and handles authentication
 export const Login = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading, error, login, clearError } = useAuth();
+  const { isAuthenticated, isLoading, error, login } = useAuth();
 
   // If already logged in, redirect to dashboard
   useEffect(() => {

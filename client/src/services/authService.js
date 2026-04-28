@@ -34,13 +34,15 @@ export const authService = {
 
   // Get current user profile
   getProfile: async () => {
-    const response = await api.get('/auth/profile');
-
-    if (response.data.success) {
-      return response.data.data; // Returns user object
+    try {
+      const response = await api.get('/auth/profile');
+      if (response.data.success) {
+        return response.data.data; // Returns user object
+      }
+      throw new Error(response.data.message || 'Failed to fetch profile');
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to fetch profile');
     }
-
-    throw new Error(response.data.message || 'Failed to fetch profile');
   },
 
   // Logout (cookie cleared by server)
