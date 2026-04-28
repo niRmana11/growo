@@ -1,0 +1,34 @@
+{
+  "name": "growo",
+  "version": "1.0.0",
+  "description": "AI-powered growth tracker for developers. Grow every day. Go every day.",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace=server\" \"npm run dev --workspace=client\"",
+    "build": "npm run build --workspace=client && npm run build --workspace=server",
+    "start": "npm start --workspace=server",
+    "server": "npm run dev --workspace=server",
+    "client": "npm run dev --workspace=client",
+    "lint": "npm run lint --workspaces",
+    "format": "npm run format --workspaces"
+  },
+  "keywords": [
+    "mern",
+    "react",
+    "nodejs",
+    "mongodb",
+    "ai",
+    "habit-tracker",
+    "developer-tools",
+    "productivity"
+  ],
+  "author": "niRmana11",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

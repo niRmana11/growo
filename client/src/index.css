@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Brand Colors */
+:root {
+  --color-primary: #7ED957;
+  --color-success: #22C55E;
+  --color-dark-green: #15803D;
+  --color-dark-nav: #0D1117;
+  --color-gray: #6B7280;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #f9fdf4;
+  color: #0D1117;
+  line-height: 1.6;
+}
+
+/* Utility Classes */
+.container-custom {
+  @apply px-4 md:px-8 lg:px-16 max-w-7xl mx-auto;
+}
+
+.btn-primary {
+  @apply px-4 py-2 bg-[#7ED957] text-white rounded-lg hover:bg-[#65C437] transition-colors font-medium;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors font-medium;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-sm border border-gray-100 p-4 md:p-6;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #7ED957 0%, #22C55E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
