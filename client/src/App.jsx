@@ -1,34 +1,57 @@
-import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './hooks/useAuth';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
+import { Dashboard } from './components/dashboard/Dashboard';
+import { ProtectedRoute } from './components/layout/ProtectedRoute';
+
+// Root redirect - send to dashboard if logged in, else to login
+const RootRedirect = () => {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#F9FDF4] to-[#E2F4CC]">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#7ED957]"></div>
+          <p className="text-gray-600 mt-4">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <Navigate to="/login" replace />;
+};
 
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F9FDF4] to-[#E2F4CC]">
-      <div className="container-custom py-20 text-center">
-        <h1 className="text-5xl md:text-6xl font-bold mb-4">
-          <span className="text-[#0D1117]">Grow</span>
-          <span className="text-[#7ED957]">O</span>
-        </h1>
-        <p className="text-xl md:text-2xl mb-2">
-          <span className="text-[#7ED957] font-semibold">Grow</span>
-          <span className="text-[#0D1117]"> every day. </span>
-          <span className="text-[#7ED957] font-semibold">Go</span>
-          <span className="text-[#0D1117]"> every day.</span>
-        </p>
-        <p className="text-gray-600 text-lg mb-8">AI-powered growth tracker for developers</p>
+    <Router>
+      <Routes>
+        {/* Root - redirects based on auth */}
+        <Route path="/" element={<RootRedirect />} />
 
-        <div className="card max-w-md mx-auto">
-          <p className="text-gray-600 mb-4">Welcome to GrowO! The initial setup is complete.</p>
-          <div className="space-y-2 text-sm text-left">
-            <p>✓ Monorepo structure initialized</p>
-            <p>✓ Express server configured</p>
-            <p>✓ React + Vite frontend ready</p>
-            <p>✓ MongoDB connection setup</p>
-            <p>✓ Tailwind CSS integrated</p>
-          </div>
-          <p className="text-gray-500 text-xs mt-4">Next: Phase 2 - Authentication System</p>
-        </div>
-      </div>
-    </div>
+        {/* Public routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Catch-all - redirect to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
