@@ -40,11 +40,11 @@ body {
 }
 
 .btn-secondary {
-  @apply px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors font-medium;
+  @apply px-4 py-2 bg-slate-200 text-slate-800 rounded-lg hover:bg-slate-300 transition-colors font-medium;
 }
 
 .card {
-  @apply bg-white rounded-lg shadow-sm border border-gray-100 p-4 md:p-6;
+  @apply bg-white rounded-lg shadow-sm border border-slate-100 p-4 md:p-6;
 }
 
 .text-gradient {

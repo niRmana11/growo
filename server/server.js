@@ -12,13 +12,13 @@ await connectDB();
 // Start server
 app.listen(PORT, () => {
   console.log(`
-╔════════════════════════════════════════╗
-║        🚀 GrowO Server Running        ║
-║     Grow every day. Go every day.      ║
-╠════════════════════════════════════════╣
-║  Environment: ${process.env.NODE_ENV || 'development'.padEnd(23)}║
-║  Server: http://localhost:${PORT}${' '.repeat(18 - PORT.toString().length)}║
-║  Status: ✓ Ready to accept requests    ║
-╚════════════════════════════════════════╝
+════════════════════════════════════════
+        🚀 GrowO Server Running            
+     Grow every day. Go every day.         
+════════════════════════════════════════
+  Environment: ${process.env.NODE_ENV || 'development'.padEnd(23)}
+  Server: http://localhost:${PORT}${' '.repeat(18 - PORT.toString().length)}
+  Status: ✓ Ready to accept requests    
+════════════════════════════════════════
   `);
 });
