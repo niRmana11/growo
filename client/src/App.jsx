@@ -32,10 +32,10 @@ const RootRedirect = () => {
 function App() {
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
 
-  // Initialize auth session from localStorage on app startup
+  // Initialize auth session on app startup (only once)
   useEffect(() => {
     initializeAuth();
-  }, [initializeAuth]);
+  }, []); // Empty dependency array - run only on mount
 
   return (
     <Router>

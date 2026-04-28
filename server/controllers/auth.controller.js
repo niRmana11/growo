@@ -15,7 +15,7 @@ const setAuthCookie = (res, token) => {
   res.cookie('authToken', token, {
     httpOnly: true, // Prevents JavaScript access (XSS protection)
     secure: process.env.NODE_ENV === 'production', // HTTPS only in production
-    sameSite: 'strict', // CSRF protection
+    sameSite: 'lax', // Allows cookies in cross-origin requests (needed for localhost development)
     maxAge: 60 * 60 * 1000, // 1 hour
     path: '/',
   });
@@ -24,7 +24,7 @@ const setAuthCookie = (res, token) => {
 // Register new user
 export const register = async (req, res) => {
   try {
-    const { email, password, name } = req.body;
+    let { email, password, name } = req.body;
 
     if (!email || !password || !name) {
       return res.status(400).json({
@@ -33,7 +33,11 @@ export const register = async (req, res) => {
       });
     }
 
-    // Check if user already exists
+    // Normalize email to prevent case-sensitivity issues
+    email = email.trim().toLowerCase();
+    name = name.trim();
+
+    // Check if user already exists (using normalized email)
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
@@ -66,6 +70,16 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     console.error('Register error:', error);
+
+    // Handle MongoDB duplicate key error (E11000)
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      return res.status(400).json({
+        success: false,
+        message: `A user with this ${field} already exists`,
+      });
+    }
+
     return res.status(500).json({
       success: false,
       message: error.message || 'Error during registration',
@@ -76,7 +90,7 @@ export const register = async (req, res) => {
 // Login user
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
@@ -85,9 +99,11 @@ export const login = async (req, res) => {
       });
     }
 
-    const normalizedEmail = email.trim().toLowerCase();
+    // Normalize email (lowercase and trim)
+    email = email.trim().toLowerCase();
+
     // Find user by email (include password for comparison)
-    const user = await User.findOne({ email: normalizedEmail }).select('+password');
+    const user = await User.findOne({ email }).select('+password');
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -154,7 +170,7 @@ export const logout = async (req, res) => {
     res.clearCookie('authToken', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'lax',
       path: '/',
     });
 

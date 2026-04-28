@@ -15,11 +15,8 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Unauthorized - redirect to login
-      // Cookie will be cleared by server via Set-Cookie: authToken=; Max-Age=0
-      window.location.href = '/login';
-    }
+    // Don't redirect here - let components/route guards handle 401s
+    // This prevents infinite redirect loops during auth initialization
     return Promise.reject(error);
   }
 );
