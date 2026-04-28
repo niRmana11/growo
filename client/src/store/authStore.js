@@ -6,7 +6,7 @@ export const useAuthStore = create((set) => ({
   // State
   user: null,
   isAuthenticated: false,
-  isLoading: false,
+  isLoading: true,
   error: null,
 
   // Set user after successful login/register
