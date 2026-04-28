@@ -5,6 +5,7 @@
 This first commit initializes the complete monorepo structure for GrowO.
 
 ### Folder Structure
+
 ```
 growo/
 ├── client/              # React + Vite frontend
@@ -63,6 +64,7 @@ open http://localhost:5173
 ## 📦 Tech Stack Installed
 
 **Server:**
+
 - express ^4.18.2
 - mongoose ^8.0.0
 - dotenv ^16.3.1
@@ -71,6 +73,7 @@ open http://localhost:5173
 - stripe, resend (@google/generative-ai (AI)
 
 **Client:**
+
 - react ^18.2.0
 - react-router-dom ^6.20.0
 - axios, zustand (state)
@@ -81,16 +84,20 @@ open http://localhost:5173
 ## 🎨 Key Files
 
 **Single Source of Truth:**
+
 - `client/src/constants/plans.js` - Feature limits for free/pro
 - `server/config/constants.js` - Must mirror client exactly
 
 **Developer Templates:**
+
 - `client/src/constants/habits.js` - 5 habit templates
 
 **API:**
+
 - `client/src/services/api.js` - Axios instance with auth interceptors
 
 **Config:**
+
 - `client/vite.config.js` - Vite build config
 - `client/tailwind.config.js` - Tailwind with brand colors
 - `server/config/db.js` - MongoDB connection
@@ -104,6 +111,7 @@ open http://localhost:5173
 - Gray: `#6B7280`
 
 Use in components:
+
 ```jsx
 <div className="bg-[#7ED957]">Primary Green</div>
 <div className="text-[#0D1117]">Dark Nav</div>
@@ -118,6 +126,7 @@ Use in components:
 ## 🔄 Next Phase: Authentication System
 
 Phase 2 will include:
+
 - User model with JWT + bcrypt
 - Register & login endpoints
 - Auth UI (Login/Register forms)
@@ -125,6 +134,7 @@ Phase 2 will include:
 - Zustand auth store
 
 Ready to proceed? Command:
+
 ```bash
 npm install  # Then start development
 ```
