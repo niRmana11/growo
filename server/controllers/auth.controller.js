@@ -2,8 +2,10 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
 // Generate JWT token
-const generateToken = (userId, plan) => {
-  return jwt.sign({ userId, plan }, process.env.JWT_SECRET, {
+// Keep tokens minimal - only contain userId for authentication
+// Authorization decisions are made by checking the database
+const generateToken = (userId) => {
+  return jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   });
 };
@@ -41,7 +43,7 @@ export const register = async (req, res) => {
 
     await user.save();
 
-    const token = generateToken(user._id, user.plan);
+    const token = generateToken(user._id);
 
     return res.status(201).json({
       success: true,
@@ -72,8 +74,9 @@ export const login = async (req, res) => {
       });
     }
 
+    const normalizedEmail = email.trim().toLowerCase();
     // Find user by email (include password for comparison)
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email: normalizedEmail }).select('+password');
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -90,7 +93,7 @@ export const login = async (req, res) => {
       });
     }
 
-    const token = generateToken(user._id, user.plan);
+    const token = generateToken(user._id);
 
     return res.status(200).json({
       success: true,
