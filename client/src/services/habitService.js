@@ -59,3 +59,14 @@ export const logHabitCompletion = async (habitId) => {
     throw error.response?.data || { success: false, message: error.message };
   }
 };
+
+// only for TESTING
+// Reset habit completion for testing (remove today's entry)
+export const resetHabitCompletion = async (habitId) => {
+  try {
+    const response = await api.post(`/habits/${habitId}/reset-completion`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { success: false, message: error.message };
+  }
+};

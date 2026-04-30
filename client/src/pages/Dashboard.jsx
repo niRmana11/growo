@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 import { useHabits } from '../hooks/useHabits.js';
+import * as habitService from '../services/habitService.js';
 import { HabitList } from '../components/habits/HabitList.jsx';
 import { HabitModal } from '../components/habits/HabitModal.jsx';
 import { LogOut, Plus, TrendingUp } from 'lucide-react';
@@ -75,6 +76,20 @@ export function Dashboard() {
   const handleDelete = async (habitId) => {
     if (confirm('Are you sure you want to delete this habit?')) {
       await remove(habitId);
+    }
+  };
+
+  // TESTING
+  // Handle reset for testing
+  const handleReset = async (habitId) => {
+    try {
+      const response = await habitService.resetHabitCompletion(habitId);
+      if (response.success) {
+        // Update habit in store with reset data
+        update(habitId, response.data);
+      }
+    } catch (err) {
+      console.error('Reset error:', err);
     }
   };
 
@@ -188,6 +203,7 @@ export function Dashboard() {
             onMarkComplete={handleMarkComplete}
             onEdit={openEditModal}
             onDelete={handleDelete}
+            onReset={handleReset}
           />
         ) : null}
       </main>

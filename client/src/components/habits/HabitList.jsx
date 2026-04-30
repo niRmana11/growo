@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { HabitCard } from './HabitCard.jsx';
 
-export function HabitList({ habits, isLoading, onMarkComplete, onEdit, onDelete }) {
+// after testing completed remove onReset
+export function HabitList({ habits, isLoading, onMarkComplete, onEdit, onDelete, onReset }) {
   const [filter, setFilter] = useState('all');
 
   const categories = [
@@ -64,6 +65,7 @@ export function HabitList({ habits, isLoading, onMarkComplete, onEdit, onDelete 
             onMarkComplete={onMarkComplete}
             onEdit={onEdit}
             onDelete={onDelete}
+            onReset={onReset}
             isLoading={isLoading}
           />
         ))}

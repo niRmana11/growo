@@ -188,11 +188,13 @@ export const logHabitCompletion = async (req, res) => {
       });
     }
 
-    // Check if already logged today
+    // Check if already logged today (use lastCompletedAt instead of completedDates)
+    // This way reset can clear lastCompletedAt without affecting total count
     const today = new Date().toDateString();
-    const alreadyLogged = habit.completedDates.some(
-      (date) => new Date(date).toDateString() === today
-    );
+    const lastCompletedDate = habit.lastCompletedAt
+      ? new Date(habit.lastCompletedAt).toDateString()
+      : null;
+    const alreadyLogged = lastCompletedDate === today;
 
     if (alreadyLogged) {
       return res.status(400).json({
@@ -217,6 +219,52 @@ export const logHabitCompletion = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: error.message || 'Error logging completion',
+    });
+  }
+};
+
+// only for testing purposes
+// Simulates next day by clearing lastCompletedAt
+// This lets you mark the habit multiple times same day for testing
+// Importantly: completedDates stays intact so total never decreases!
+
+export const resetHabitCompletion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const habit = await Habit.findById(id);
+
+    if (!habit) {
+      return res.status(404).json({
+        success: false,
+        message: 'Habit not found',
+      });
+    }
+
+    // Verify ownership
+    if (habit.userId.toString() !== req.userId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Not authorized',
+      });
+    }
+
+    // Only clear lastCompletedAt (simulates moving to next day)
+    // DO NOT touch completedDates - preserves total and history!
+    // This way: button re-enables, but total stays the same
+    habit.lastCompletedAt = null;
+
+    await habit.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Reset for next day - you can mark again (total preserved, streak continues)',
+      data: habit,
+    });
+  } catch (error) {
+    console.error('Reset error:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Error resetting completion',
     });
   }
 };

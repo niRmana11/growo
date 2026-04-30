@@ -7,6 +7,7 @@ import {
   updateHabit,
   deleteHabit,
   logHabitCompletion,
+  resetHabitCompletion,
 } from '../controllers/habit.controller.js';
 
 const router = express.Router();
@@ -31,5 +32,8 @@ router.delete('/:id', deleteHabit);
 
 // Log completion for today
 router.post('/:id/log', logHabitCompletion);
+
+// ONLY FOR TESTING PURPOSE
+router.post('/:id/reset-completion', resetHabitCompletion);
 
 export default router;

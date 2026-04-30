@@ -1,6 +1,7 @@
-import { Trash2, Edit2, Check } from 'lucide-react';
+import { Trash2, Edit2, Check, RotateCcw } from 'lucide-react';
 
-export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, isLoading }) {
+// after the testing completed remove onReset
+export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, isLoading }) {
   const today = new Date().toDateString();
   const lastCompleted = habit.lastCompletedAt
     ? new Date(habit.lastCompletedAt).toDateString()
@@ -38,6 +39,15 @@ export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, isLoading }
             disabled={isLoading}
           >
             <Edit2 size={16} className="text-gray-500" />
+          </button>
+          {/* TESTING */}
+          <button
+            onClick={() => onReset(habit._id)}
+            className="p-1.5 hover:bg-yellow-50 rounded transition-colors"
+            title="Reset for testing (remove today's completion)"
+            disabled={isLoading}
+          >
+            <RotateCcw size={16} className="text-gray-400 hover:text-yellow-600" />
           </button>
           <button
             onClick={() => onDelete(habit._id)}
