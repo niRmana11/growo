@@ -5,7 +5,8 @@ import { useHabits } from '../hooks/useHabits.js';
 import * as habitService from '../services/habitService.js';
 import { HabitList } from '../components/habits/HabitList.jsx';
 import { HabitModal } from '../components/habits/HabitModal.jsx';
-import { LogOut, Plus, TrendingUp } from 'lucide-react';
+import { LogOut, Plus, TrendingUp, Flame } from 'lucide-react';
+import growoLogo from '../assets/growo-logo.png';
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -102,11 +103,18 @@ export function Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">GrowO</h1>
-              <p className="text-sm text-gray-600">Grow every day. Go every day.</p>
+            <div className="flex items-center gap-3">
+              <div>
+                <img src={growoLogo} alt="GrowO Logo" className="h-12 w-auto" />
+                <p className="text-xs mt-1 font-medium">
+                  <span className="text-green-600">Grow</span>
+                  <span className="text-gray-900"> every day. </span>
+                  <span className="text-green-600">Go</span>
+                  <span className="text-gray-900"> every day.</span>
+                </p>
+              </div>
             </div>
             <button
               onClick={handleLogout}
@@ -123,7 +131,7 @@ export function Dashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome section */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}! 👋</h2>
+          <h2 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}!</h2>
           <p className="text-gray-600 mt-2">Track your daily habits and build consistency</p>
         </div>
 
@@ -145,7 +153,10 @@ export function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Best Streak</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.maxStreak} 🔥</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <p className="text-3xl font-bold text-gray-900">{stats.maxStreak}</p>
+                  <Flame size={28} className="text-orange-500" />
+                </div>
               </div>
               <div className="bg-green-50 p-3 rounded-lg">
                 <TrendingUp size={24} className="text-green-600" />
