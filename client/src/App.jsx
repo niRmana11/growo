@@ -4,7 +4,7 @@ import { useAuthStore } from './store/authStore';
 import { useAuth } from './hooks/useAuth';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
-import { Dashboard } from './components/dashboard/Dashboard';
+import { Dashboard } from './pages/Dashboard';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
 // Root redirect - send to dashboard if logged in, else to login
