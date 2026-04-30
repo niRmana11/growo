@@ -12,6 +12,7 @@ export function HabitList({ habits, isLoading, onMarkComplete, onEdit, onDelete,
     { value: 'fitness', label: 'Fitness' },
     { value: 'health', label: 'Health' },
     { value: 'productivity', label: 'Productivity' },
+    { value: 'fun', label: 'Fun' },
     { value: 'other', label: 'Other' },
   ];
 

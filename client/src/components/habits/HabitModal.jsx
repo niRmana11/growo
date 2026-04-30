@@ -6,9 +6,9 @@ export function HabitModal({ isOpen, mode = 'create', habitData, onClose, onSubm
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-96 overflow-y-auto">
+      <div className="bg-white rounded-3xl shadow-xl max-w-lg w-full px-5 py-3">
         {/* Modal header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-white p-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900">
             {mode === 'create' ? 'Create New Habit' : 'Edit Habit'}
           </h2>

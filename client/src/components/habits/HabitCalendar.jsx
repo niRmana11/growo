@@ -100,7 +100,7 @@ export function HabitCalendar({ habit }) {
               }`}
               title={
                 day
-                  ? `${currentMonth.toLocaleString('default', { month: 'short' })} ${day}${isCompleted ? ' ✓' : ''}`
+                  ? `${currentMonth.toLocaleString('default', { month: 'short' })} ${day}${isCompleted ? ' ✔' : ''}`
                   : ''
               }
             >

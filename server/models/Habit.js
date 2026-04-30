@@ -24,7 +24,7 @@ const habitSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ['coding', 'learning', 'fitness', 'health', 'productivity', 'other'],
+      enum: ['coding', 'learning', 'fitness', 'health', 'productivity', 'fun', 'other'],
       default: 'other',
     },
     icon: {

@@ -1,4 +1,5 @@
 import { Trash2, Edit2, Check, RotateCcw } from 'lucide-react';
+import { getHabitIconComponent } from '../../utils/habitIcons.js';
 
 // after the testing completed remove onReset
 export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, isLoading }) {
@@ -14,6 +15,7 @@ export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, is
     fitness: 'bg-red-50 text-red-700 border-red-200',
     health: 'bg-green-50 text-green-700 border-green-200',
     productivity: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+    fun: 'bg-orange-50 text-orange-700 border-orange-200',
     other: 'bg-gray-50 text-gray-700 border-gray-200',
   };
 
@@ -24,7 +26,10 @@ export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, is
       {/* Header with icon and name */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-start gap-3 flex-1">
-          <span className="text-3xl">{habit.icon}</span>
+          {(() => {
+            const IconComponent = getHabitIconComponent(habit.icon);
+            return <IconComponent size={32} className="text-gray-700 flex-shrink-0 mt-1" />;
+          })()}
           <div className="flex-1">
             <h3 className="font-semibold text-gray-900">{habit.name}</h3>
             {habit.description && <p className="text-sm text-gray-600 mt-1">{habit.description}</p>}
@@ -88,7 +93,9 @@ export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, is
       {/* Last completed info */}
       <div className="text-xs text-gray-500 mb-4">
         {isCompletedToday ? (
-          <span className="text-green-600 font-medium">✓ Done today</span>
+          <span className="text-green-600 font-medium flex items-center gap-1">
+            <Check size={16} className="inline" /> Done today
+          </span>
         ) : lastCompleted ? (
           <span>Last: {new Date(habit.lastCompletedAt).toLocaleDateString()}</span>
         ) : (
