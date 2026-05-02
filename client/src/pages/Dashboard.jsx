@@ -6,6 +6,8 @@ import * as habitService from '../services/habitService.js';
 import { HabitList } from '../components/habits/HabitList.jsx';
 import { HabitModal } from '../components/habits/HabitModal.jsx';
 import { LogOut, Plus, TrendingUp, Flame } from 'lucide-react';
+import { Navbar } from '../components/layout/Navbar.jsx';
+import { Footer } from '../components/layout/Footer.jsx';
 import growoLogo from '../assets/growo-logo.png';
 import flameIcon from '../assets/icons/fire.png';
 import listIcon from '../assets/icons/list.png';
@@ -106,31 +108,7 @@ export function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div>
-                <img src={growoLogo} alt="GrowO Logo" className="h-12 w-auto" />
-                <p className="text-xs mt-1 font-medium">
-                  <span className="text-green-600">Grow</span>
-                  <span className="text-gray-900"> every day. </span>
-                  <span className="text-green-600">Go</span>
-                  <span className="text-gray-900"> every day.</span>
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <LogOut size={18} />
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
-
+      <Navbar user={user} onLogout={handleLogout} />
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome section */}
@@ -222,6 +200,8 @@ export function Dashboard() {
           />
         ) : null}
       </main>
+
+      <Footer />
 
       {/* Modal */}
       <HabitModal
