@@ -7,6 +7,10 @@ import { HabitList } from '../components/habits/HabitList.jsx';
 import { HabitModal } from '../components/habits/HabitModal.jsx';
 import { LogOut, Plus, TrendingUp, Flame } from 'lucide-react';
 import growoLogo from '../assets/growo-logo.png';
+import flameIcon from '../assets/icons/fire.png';
+import listIcon from '../assets/icons/list.png';
+import checkIcon from '../assets/icons/check.png';
+import bestIcon from '../assets/icons/best.png';
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -143,8 +147,8 @@ export function Dashboard() {
                 <p className="text-gray-600 text-sm">Total Habits</p>
                 <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalHabits}</p>
               </div>
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <Plus size={24} className="text-blue-600" />
+              <div>
+                <img src={listIcon} alt="Total Habits" className="w-12 h-12" />
               </div>
             </div>
           </div>
@@ -155,11 +159,11 @@ export function Dashboard() {
                 <p className="text-gray-600 text-sm">Best Streak</p>
                 <div className="flex items-center gap-2 mt-2">
                   <p className="text-3xl font-bold text-gray-900">{stats.maxStreak}</p>
-                  <Flame size={28} className="text-orange-500" />
+                  <img src={flameIcon} className="w-6 h-6" />
                 </div>
               </div>
-              <div className="bg-green-50 p-3 rounded-lg">
-                <TrendingUp size={24} className="text-green-600" />
+              <div>
+                <img src={bestIcon} alt="Best Streak" className="w-12 h-12" />
               </div>
             </div>
           </div>
@@ -170,8 +174,8 @@ export function Dashboard() {
                 <p className="text-gray-600 text-sm">Completions</p>
                 <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalCompletions}</p>
               </div>
-              <div className="bg-purple-50 p-3 rounded-lg">
-                <TrendingUp size={24} className="text-purple-600" />
+              <div>
+                <img src={checkIcon} alt="Completions" className="w-12 h-12" />
               </div>
             </div>
           </div>
