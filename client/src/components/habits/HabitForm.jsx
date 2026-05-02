@@ -170,10 +170,10 @@ export function HabitForm({ initialData, onSubmit, onCancel, isLoading }) {
             type="button"
             onClick={() => setCategoryOpen((prev) => !prev)}
             disabled={isLoading}
-            className={`w-full px-3 py-2.5 border rounded-lg flex items-center justify-between transition-all bg-white disabled:bg-gray-100 ${
+            className={`w-full px-3 py-3 border rounded-lg flex items-center justify-between transition-all bg-white disabled:bg-gray-100 ${
               errors.category
                 ? 'border-red-500 bg-red-50'
-                : 'border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500'
+                : 'border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent'
             }`}
           >
             <span
@@ -247,7 +247,7 @@ export function HabitForm({ initialData, onSubmit, onCancel, isLoading }) {
         <button
           type="submit"
           disabled={isLoading}
-          className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:shadow-none"
+          className="flex-1 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-semibold py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:shadow-none"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -263,7 +263,7 @@ export function HabitForm({ initialData, onSubmit, onCancel, isLoading }) {
           type="button"
           onClick={onCancel}
           disabled={isLoading}
-          className="flex-1 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-300 text-gray-700 font-semibold py-2.5 rounded-lg transition-all duration-200"
+          className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-900 font-semibold py-2.5 rounded-lg transition-all duration-200"
         >
           Cancel
         </button>
