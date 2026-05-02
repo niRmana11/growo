@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { HABIT_ICONS } from '../../utils/habitIcons.js';
 
 const CATEGORIES = [
@@ -16,10 +17,25 @@ export function HabitForm({ initialData, onSubmit, onCancel, isLoading }) {
     initialData || {
       name: '',
       description: '',
-      category: 'other',
+      category: '',
       icon: 'star',
     }
   );
+
+  // Inside HabitForm, add this state:
+  const [categoryOpen, setCategoryOpen] = useState(false);
+  const categoryRef = useRef(null);
+
+  // Close on outside click:
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
+        setCategoryOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const [errors, setErrors] = useState({});
 
@@ -30,6 +46,10 @@ export function HabitForm({ initialData, onSubmit, onCancel, isLoading }) {
       newErrors.name = 'Habit name is required';
     } else if (formData.name.trim().length > 100) {
       newErrors.name = 'Habit name must be 100 characters or less';
+    }
+
+    if (!formData.category) {
+      newErrors.category = 'Please select a category';
     }
 
     if (formData.description && formData.description.length > 500) {
@@ -123,24 +143,61 @@ export function HabitForm({ initialData, onSubmit, onCancel, isLoading }) {
         </div>
 
         {/* Category - Right */}
-        <div>
-          <label htmlFor="category" className="block text-sm font-semibold text-gray-900 mb-2">
-            Category
+        <div ref={categoryRef} className="relative">
+          <label className="block text-sm font-semibold text-gray-900 mb-2">
+            Category <span className="text-red-500">*</span>
           </label>
-          <select
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white disabled:bg-gray-100"
+
+          {/* Trigger button */}
+          <button
+            type="button"
+            onClick={() => setCategoryOpen((prev) => !prev)}
             disabled={isLoading}
+            className={`w-full px-3 py-2.5 border rounded-lg flex items-center justify-between transition-all bg-white disabled:bg-gray-100 ${
+              errors.category
+                ? 'border-red-500 bg-red-50'
+                : 'border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500'
+            }`}
           >
-            {CATEGORIES.map((cat) => (
-              <option key={cat.value} value={cat.value}>
-                {cat.label}
-              </option>
-            ))}
-          </select>
+            <span
+              className={`text-sm truncate ${formData.category ? 'text-gray-800' : 'text-gray-400'}`}
+            >
+              {formData.category
+                ? CATEGORIES.find((c) => c.value === formData.category)?.label
+                : 'Select...'}
+            </span>
+            <ChevronDown
+              size={16}
+              className={`ml-1 shrink-0 text-gray-500 transition-transform duration-200 ${categoryOpen ? 'rotate-180' : ''}`}
+            />
+          </button>
+
+          {/* Dropdown */}
+          {categoryOpen && (
+            <ul className="absolute z-50 mt-1 w-full bg-white border border-green-200 rounded-lg shadow-lg overflow-hidden">
+              {CATEGORIES.map((cat) => (
+                <li
+                  key={cat.value}
+                  onClick={() => {
+                    setFormData((prev) => ({ ...prev, category: cat.value }));
+                    setErrors((prev) => ({ ...prev, category: '' }));
+                    setCategoryOpen(false);
+                  }}
+                  className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                    formData.category === cat.value
+                      ? 'bg-green-500 text-white font-medium'
+                      : 'text-gray-700 hover:bg-green-50'
+                  }`}
+                >
+                  {cat.label}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {errors.category && (
+            <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.category}</p>
+          )}
         </div>
       </div>
 
