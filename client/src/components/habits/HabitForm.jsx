@@ -97,21 +97,38 @@ export function HabitForm({ initialData, onSubmit, onCancel, isLoading }) {
         <label className="block text-sm font-semibold text-gray-900 mb-3">Choose Icon</label>
         <div className="grid grid-cols-6 gap-2">
           {HABIT_ICONS.map((iconObj) => {
-            const IconComponent = iconObj.component;
             const isSelected = formData.icon === iconObj.name;
+
             return (
               <button
                 key={iconObj.name}
                 type="button"
                 onClick={() => setFormData((prev) => ({ ...prev, icon: iconObj.name }))}
-                className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group ${
                   isSelected
-                    ? 'bg-green-400 ring-green-200 scale-110 shadow-lg'
-                    : 'bg-gray-100 hover:bg-green-100 hover:scale-105'
-                }`}
+                    ? 'bg-green-500 scale-110 shadow-lg'
+                    : 'bg-gray-100 hover:bg-green-100 hover:scale-110'
+                } active:scale-90`}
                 title={iconObj.label}
               >
-                <IconComponent size={24} className={isSelected ? 'text-white' : 'text-gray-700'} />
+                {iconObj.type === 'image' ? (
+                  <img
+                    src={iconObj.src}
+                    alt={iconObj.label}
+                    className={`
+                w-7 h-7 object-contain transition-all duration-300
+                ${isSelected ? 'scale-110' : 'opacity-80 group-hover:scale-110'}
+              `}
+                  />
+                ) : (
+                  <iconObj.component
+                    size={24}
+                    className={`
+                transition-all duration-300
+                ${isSelected ? 'text-white' : 'text-gray-700 group-hover:text-green-600'}
+              `}
+                  />
+                )}
               </button>
             );
           })}
