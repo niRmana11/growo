@@ -1,4 +1,5 @@
 import Habit from '../models/Habit.js';
+import HabitLog from '../models/HabitLog.js';
 
 // Create new habit
 export const createHabit = async (req, res) => {
@@ -205,6 +206,14 @@ export const logHabitCompletion = async (req, res) => {
 
     // Add today's date to completedDates
     habit.completedDates.push(new Date());
+
+    // Create a detailed log entry for the contribution graph
+    const habitLog = new HabitLog({
+      userId: req.userId,
+      habitId: habit._id,
+      completedAt: new Date(),
+    });
+    await habitLog.save();
 
     // Increment streak
     await habit.incrementStreak();
