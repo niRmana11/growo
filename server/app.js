@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes.js';
+import habitRoutes from './routes/habit.routes.js';
 
 const app = express();
 
@@ -51,6 +52,9 @@ app.get('/api', (req, res) => {
 
 // Auth routes
 app.use('/api/auth', authRoutes);
+
+// Habit routes
+app.use('/api/habits', habitRoutes);
 
 // Error handling
 app.use((req, res) => {
