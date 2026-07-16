@@ -1,5 +1,6 @@
 import Habit from '../models/Habit.js';
 import HabitLog from '../models/HabitLog.js';
+import { calculateGlobalStreak } from '../services/streak.service.js';
 
 // Create new habit
 export const createHabit = async (req, res) => {
@@ -61,20 +62,31 @@ export const getUserHabits = async (req, res) => {
 export const getHabitStats = async (req, res) => {
   try {
     const habits = await Habit.find({ userId: req.userId });
-
     const stats = habits.map((habit) => habit.getStats());
 
     const totalHabits = habits.length;
-    const maxStreak = habits.length > 0 ? Math.max(...habits.map((h) => h.currentStreak)) : 0;
     const totalCompletions = habits.reduce((sum, h) => sum + h.completedDates.length, 0);
+
+    // Use our new global streak service
+    const globalStreakData = await calculateGlobalStreak(req.userId);
+
+    // Fetch logs for the contribution graph (last 30 days for the free tier)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const recentLogs = await HabitLog.find({
+      userId: req.userId,
+      completedAt: { $gte: thirtyDaysAgo },
+    }).select('completedAt -_id');
 
     return res.status(200).json({
       success: true,
       data: {
         totalHabits,
-        maxStreak,
+        maxStreak: globalStreakData.longestStreak,
+        currentStreak: globalStreakData.currentStreak,
         totalCompletions,
         habits: stats,
+        recentLogs: recentLogs.map((log) => log.completedAt),
       },
     });
   } catch (error) {
