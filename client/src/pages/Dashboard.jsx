@@ -13,6 +13,8 @@ import flameIcon from '../assets/icons/fire.png';
 import listIcon from '../assets/icons/list.png';
 import checkIcon from '../assets/icons/check.png';
 import bestIcon from '../assets/icons/best.png';
+import { TodayProgress } from '../components/dashboard/TodayProgress.jsx';
+import { ContributionGraph } from '../components/dashboard/ContributionGraph.jsx';
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -34,10 +36,25 @@ export function Dashboard() {
   const [modalMode, setModalMode] = useState('create');
   const [editingHabit, setEditingHabit] = useState(null);
   const [stats, setStats] = useState({ totalHabits: 0, maxStreak: 0, totalCompletions: 0 });
+  const [globalStats, setGlobalStats] = useState({ currentStreak: 0, maxStreak: 0, logDates: [] });
 
   // Load habits on mount
   useEffect(() => {
     fetchHabits();
+
+    // Fetch global stats from our newly updated endpoint
+    habitService
+      .getHabitStats()
+      .then((res) => {
+        if (res.success) {
+          setGlobalStats({
+            currentStreak: res.data.currentStreak || 0,
+            maxStreak: res.data.maxStreak || 0,
+            logDates: res.data.recentLogs || [],
+          });
+        }
+      })
+      .catch((err) => console.error('Failed to load global stats:', err));
   }, []);
 
   // Update stats when habits change
@@ -136,7 +153,7 @@ export function Dashboard() {
               <div>
                 <p className="text-gray-600 text-sm">Best Streak</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <p className="text-3xl font-bold text-gray-900">{stats.maxStreak}</p>
+                  <p className="text-3xl font-bold text-gray-900">{globalStats.maxStreak}</p>
                   <img src={flameIcon} className="w-6 h-6" />
                 </div>
               </div>
@@ -168,6 +185,9 @@ export function Dashboard() {
             </button>
           </div>
         )}
+
+        <TodayProgress habits={habits} />
+        <ContributionGraph logDates={globalStats.logDates} />
 
         {/* Create habit button */}
         <div className="mb-6 flex gap-3">
