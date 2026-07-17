@@ -1,4 +1,6 @@
 import Habit from '../models/Habit.js';
+import HabitLog from '../models/HabitLog.js';
+import { calculateGlobalStreak } from '../services/streak.service.js';
 
 // Create new habit
 export const createHabit = async (req, res) => {
@@ -60,20 +62,31 @@ export const getUserHabits = async (req, res) => {
 export const getHabitStats = async (req, res) => {
   try {
     const habits = await Habit.find({ userId: req.userId });
-
     const stats = habits.map((habit) => habit.getStats());
 
     const totalHabits = habits.length;
-    const maxStreak = habits.length > 0 ? Math.max(...habits.map((h) => h.currentStreak)) : 0;
     const totalCompletions = habits.reduce((sum, h) => sum + h.completedDates.length, 0);
+
+    // Use our new global streak service
+    const globalStreakData = await calculateGlobalStreak(req.userId);
+
+    // Fetch logs for the contribution graph (last 30 days for the free tier)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const recentLogs = await HabitLog.find({
+      userId: req.userId,
+      completedAt: { $gte: thirtyDaysAgo },
+    }).select('completedAt -_id');
 
     return res.status(200).json({
       success: true,
       data: {
         totalHabits,
-        maxStreak,
+        maxStreak: globalStreakData.longestStreak,
+        currentStreak: globalStreakData.currentStreak,
         totalCompletions,
         habits: stats,
+        recentLogs: recentLogs.map((log) => log.completedAt),
       },
     });
   } catch (error) {
@@ -206,6 +219,14 @@ export const logHabitCompletion = async (req, res) => {
     // Add today's date to completedDates
     habit.completedDates.push(new Date());
 
+    // Create a detailed log entry for the contribution graph
+    const habitLog = new HabitLog({
+      userId: req.userId,
+      habitId: habit._id,
+      completedAt: new Date(),
+    });
+    await habitLog.save();
+
     // Increment streak
     await habit.incrementStreak();
 
@@ -228,36 +249,34 @@ export const logHabitCompletion = async (req, res) => {
 // This lets you mark the habit multiple times same day for testing
 // Importantly: completedDates stays intact so total never decreases!
 
+// Fully reset habit for testing
 export const resetHabitCompletion = async (req, res) => {
   try {
     const { id } = req.params;
     const habit = await Habit.findById(id);
 
     if (!habit) {
-      return res.status(404).json({
-        success: false,
-        message: 'Habit not found',
-      });
+      return res.status(404).json({ success: false, message: 'Habit not found' });
     }
 
     // Verify ownership
     if (habit.userId.toString() !== req.userId.toString()) {
-      return res.status(403).json({
-        success: false,
-        message: 'Not authorized',
-      });
+      return res.status(403).json({ success: false, message: 'Not authorized' });
     }
 
-    // Only clear lastCompletedAt (simulates moving to next day)
-    // DO NOT touch completedDates - preserves total and history!
-    // This way: button re-enables, but total stays the same
+    // 1. Wipe all habit stats clean
     habit.lastCompletedAt = null;
-
+    habit.completedDates = [];
+    habit.currentStreak = 0;
+    habit.bestStreak = 0;
     await habit.save();
+
+    // 2. Delete all logs so the Contribution Heatmap updates
+    await HabitLog.deleteMany({ habitId: habit._id });
 
     return res.status(200).json({
       success: true,
-      message: 'Reset for next day - you can mark again (total preserved, streak continues)',
+      message: 'Habit fully wiped clean (streaks, logs, and heatmap cleared)',
       data: habit,
     });
   } catch (error) {
