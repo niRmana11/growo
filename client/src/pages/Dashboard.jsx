@@ -187,7 +187,11 @@ export function Dashboard() {
         )}
 
         <TodayProgress habits={habits} />
-        <ContributionGraph logDates={globalStats.logDates} />
+        <ContributionGraph
+          logDates={globalStats.logDates}
+          totalHabits={stats.totalHabits}
+          userCreatedAt={user?.createdAt}
+        />
 
         {/* Create habit button */}
         <div className="mb-6 flex gap-3">
