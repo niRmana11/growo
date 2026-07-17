@@ -41,8 +41,13 @@ export function Dashboard() {
   // Load habits on mount
   useEffect(() => {
     fetchHabits();
+  }, []);
 
-    // Fetch global stats from our newly updated endpoint
+  // Update local stats AND auto-refresh heatmap whenever ANY habit changes (Complete, Reset, Create, Delete)
+  useEffect(() => {
+    setStats(getTotalStats());
+
+    // Auto-fetch fresh heatmap and streak data instantly
     habitService
       .getHabitStats()
       .then((res) => {
@@ -54,12 +59,7 @@ export function Dashboard() {
           });
         }
       })
-      .catch((err) => console.error('Failed to load global stats:', err));
-  }, []);
-
-  // Update stats when habits change
-  useEffect(() => {
-    setStats(getTotalStats());
+      .catch((err) => console.error('Failed to auto-refresh global stats:', err));
   }, [habits]);
 
   // Handle logout
@@ -109,19 +109,8 @@ export function Dashboard() {
     try {
       const response = await habitService.resetHabitCompletion(habitId);
       if (response.success) {
-        // 1. Update the habit card in the store
+        // Just update the habit. The useEffect above will automatically catch this and refresh the heatmap!
         update(habitId, response.data);
-
-        // 2. Fetch the fresh global stats so the heatmap instantly updates!
-        habitService.getHabitStats().then((res) => {
-          if (res.success) {
-            setGlobalStats({
-              currentStreak: res.data.currentStreak || 0,
-              maxStreak: res.data.maxStreak || 0,
-              logDates: res.data.recentLogs || [],
-            });
-          }
-        });
       }
     } catch (err) {
       console.error('Reset error:', err);

@@ -18,19 +18,18 @@ export function ContributionGraph({ logDates = [], totalHabits = 0, userCreatedA
     dateCounts[localDate] = (dateCounts[localDate] || 0) + 1;
   });
 
-  const getIntensityColor = (count, total, date) => {
+  const getIntensityColor = (count, date) => {
     // 1. If this date was BEFORE the user created their account, make it neutral gray
     if (date < joinedDate) return 'bg-slate-100';
 
-    // 2. If it is after they joined and they missed it, make it red
+    // 2. Fixed thresholds (No more percentages!)
     if (count === 0) return 'bg-red-500';
-    if (total === 0) return 'bg-green-500';
-
-    const percentage = count / total;
-    if (percentage >= 1) return 'bg-green-600';
-    if (percentage >= 0.67) return 'bg-green-400';
-    if (percentage >= 0.34) return 'bg-green-300';
-    return 'bg-green-200';
+    if (count === 1) return 'bg-green-100';
+    if (count === 2) return 'bg-green-200';
+    if (count === 3) return 'bg-green-300';
+    if (count === 4) return 'bg-green-400';
+    if (count === 5) return 'bg-green-500';
+    return 'bg-green-600'; // 4 or more habits is max green!
   };
 
   for (let i = 29; i >= 0; i--) {
@@ -45,7 +44,7 @@ export function ContributionGraph({ logDates = [], totalHabits = 0, userCreatedA
     days.push({
       date: d,
       count,
-      colorClass: getIntensityColor(count, totalHabits, d),
+      colorClass: getIntensityColor(count, d),
     });
   }
 
