@@ -109,8 +109,19 @@ export function Dashboard() {
     try {
       const response = await habitService.resetHabitCompletion(habitId);
       if (response.success) {
-        // Update habit in store with reset data
+        // 1. Update the habit card in the store
         update(habitId, response.data);
+
+        // 2. Fetch the fresh global stats so the heatmap instantly updates!
+        habitService.getHabitStats().then((res) => {
+          if (res.success) {
+            setGlobalStats({
+              currentStreak: res.data.currentStreak || 0,
+              maxStreak: res.data.maxStreak || 0,
+              logDates: res.data.recentLogs || [],
+            });
+          }
+        });
       }
     } catch (err) {
       console.error('Reset error:', err);
