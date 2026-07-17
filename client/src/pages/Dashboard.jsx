@@ -127,53 +127,12 @@ export function Dashboard() {
       {/* Header */}
       <Navbar user={user} onLogout={handleLogout} />
       {/* Main content */}
+      {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}!</h2>
           <p className="text-gray-600 mt-2">Track your daily habits and build consistency</p>
-        </div>
-
-        {/* Stats cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Total Habits</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalHabits}</p>
-              </div>
-              <div>
-                <img src={listIcon} alt="Total Habits" className="w-12 h-12" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Best Streak</p>
-                <div className="flex items-center gap-2 mt-2">
-                  <p className="text-3xl font-bold text-gray-900">{globalStats.maxStreak}</p>
-                  <img src={flameIcon} className="w-6 h-6" />
-                </div>
-              </div>
-              <div>
-                <img src={bestIcon} alt="Best Streak" className="w-12 h-12" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Completions</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalCompletions}</p>
-              </div>
-              <div>
-                <img src={checkIcon} alt="Completions" className="w-12 h-12" />
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Error message */}
@@ -186,43 +145,98 @@ export function Dashboard() {
           </div>
         )}
 
-        <TodayProgress habits={habits} />
-        <ContributionGraph
-          logDates={globalStats.logDates}
-          totalHabits={stats.totalHabits}
-          userCreatedAt={user?.createdAt}
-        />
+        {/* TWO-COLUMN LAYOUT CONTAINER */}
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* LEFT COLUMN: Actions (Takes up 2/3 of space on desktop) */}
+          <div className="w-full lg:w-2/3 flex flex-col order-1">
+            <TodayProgress habits={habits} />
 
-        {/* Create habit button */}
-        <div className="mb-6 flex gap-3">
-          <button
-            onClick={openCreateModal}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
-          >
-            <Plus size={20} />
-            New Habit
-          </button>
-        </div>
+            {/* Create habit button */}
+            <div className="mb-6 flex gap-3 mt-2">
+              <button
+                onClick={openCreateModal}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+              >
+                <Plus size={20} />
+                New Habit
+              </button>
+            </div>
 
-        {/* Loading state */}
-        {isLoading && habits.length === 0 && (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-            <p className="text-gray-600 mt-4">Loading your habits...</p>
+            {/* Loading state */}
+            {isLoading && habits.length === 0 && (
+              <div className="text-center py-12">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+                <p className="text-gray-600 mt-4">Loading your habits...</p>
+              </div>
+            )}
+
+            {/* Habits list */}
+            {!isLoading || habits.length > 0 ? (
+              <HabitList
+                habits={habits}
+                isLoading={isLoading}
+                onMarkComplete={handleMarkComplete}
+                onEdit={openEditModal}
+                onDelete={handleDelete}
+                onReset={handleReset}
+              />
+            ) : null}
           </div>
-        )}
 
-        {/* Habits list */}
-        {!isLoading || habits.length > 0 ? (
-          <HabitList
-            habits={habits}
-            isLoading={isLoading}
-            onMarkComplete={handleMarkComplete}
-            onEdit={openEditModal}
-            onDelete={handleDelete}
-            onReset={handleReset}
-          />
-        ) : null}
+          {/* RIGHT COLUMN: Analytics (Takes up 1/3 of space on desktop) */}
+          <div className="w-full lg:w-1/3 flex flex-col order-2 gap-6">
+            {/* Stats cards (Stacked vertically) */}
+            <div className="flex flex-col gap-4">
+              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-600 text-sm">Total Habits</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalHabits}</p>
+                  </div>
+                  <div>
+                    <img src={listIcon} alt="Total Habits" className="w-12 h-12" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-600 text-sm">Best Streak</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <p className="text-3xl font-bold text-gray-900">{globalStats.maxStreak}</p>
+                      <img src={flameIcon} className="w-6 h-6" />
+                    </div>
+                  </div>
+                  <div>
+                    <img src={bestIcon} alt="Best Streak" className="w-12 h-12" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-600 text-sm">Completions</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">
+                      {stats.totalCompletions}
+                    </p>
+                  </div>
+                  <div>
+                    <img src={checkIcon} alt="Completions" className="w-12 h-12" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Contribution Graph at the bottom of the sidebar */}
+            <ContributionGraph
+              logDates={globalStats.logDates}
+              totalHabits={stats.totalHabits}
+              userCreatedAt={user?.createdAt}
+            />
+          </div>
+        </div>
       </main>
 
       <Footer />
