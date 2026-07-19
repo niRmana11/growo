@@ -1,11 +1,11 @@
 import express from 'express';
 import { getWeeklySummary, chatWithCoach, getInsights } from '../controllers/ai.controller.js';
-import { protect } from '../middleware/auth.middleware.js';
+import { verifyToken } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
 // All AI routes require the user to be logged in
-router.use(protect);
+router.use(verifyToken);
 
 // Get the weekly coaching summary (Soft Gated)
 router.get('/summary', getWeeklySummary);

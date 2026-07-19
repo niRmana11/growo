@@ -1,13 +1,14 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 
-// Initialize Gemini API
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-// We use gemini-1.5-pro because it's highly capable of following precise coaching instructions
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+// Initialize lazily so we guarantee the .env file has fully loaded first
+const getClient = () => {
+  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+};
+
+const MODEL = 'gemini-flash-latest';
 
 // ─── 1. Weekly Summary ───────────────────────────────────────────────────────────
 export const generateWeeklySummary = async (user, habits, logs) => {
-  // Format habit data for the prompt
   const habitSummary = habits
     .map((h) => {
       const weekLogs = logs.filter((l) => l.habitId.toString() === h._id.toString());
@@ -34,8 +35,12 @@ Write a weekly coaching summary that:
 Keep it under 150 words. Sound human, not robotic. Do not use markdown formatting.
   `;
 
-  const result = await model.generateContent(prompt);
-  return result.response.text();
+  const result = await getClient().models.generateContent({
+    model: MODEL,
+    contents: prompt,
+  });
+
+  return result.text;
 };
 
 // ─── 2. Coach Chat ───────────────────────────────────────────────────────────────
@@ -61,8 +66,12 @@ Their message: "${userMessage}"
 Respond as a coach who knows their numbers. Be direct, specific, and keep your answer under 100 words.
   `;
 
-  const result = await model.generateContent(prompt);
-  return result.response.text();
+  const result = await getClient().models.generateContent({
+    model: MODEL,
+    contents: prompt,
+  });
+
+  return result.text;
 };
 
 // ─── 3. Pattern Insights ─────────────────────────────────────────────────────────
@@ -94,9 +103,12 @@ Return as a JSON array of strings: ["insight1", "insight2", "insight3"]
 Return ONLY the JSON array, no backticks, no markdown, no other text.
   `;
 
-  const result = await model.generateContent(prompt);
-  const text = result.response.text().trim();
-  // Clean up any markdown code blocks the AI might accidentally add
+  const result = await getClient().models.generateContent({
+    model: MODEL,
+    contents: prompt,
+  });
+
+  const text = result.text.trim();
   const clean = text.replace(/```json|```/g, '').trim();
   return JSON.parse(clean);
 };
