@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getWeeklySummary } from '../../services/aiService.js';
 import { Sparkles, Lock } from 'lucide-react';
 
@@ -8,7 +8,13 @@ export function WeeklySummary() {
   const [isGated, setIsGated] = useState(false);
   const [error, setError] = useState('');
 
+  // 1. Create a ref to track if we already fetched
+  const hasFetched = useRef(false);
+
   useEffect(() => {
+    // 2. If we already fetched, instantly return to ignore the StrictMode double-fire
+    if (hasFetched.current) return;
+    hasFetched.current = true;
     const fetchSummary = async () => {
       try {
         const response = await getWeeklySummary();

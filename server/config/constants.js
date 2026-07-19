@@ -4,8 +4,8 @@
 export const PLANS = {
   free: {
     maxHabits: 5,
-    aiSummariesAllowed: 2,
-    aiMessagesPreview: 3,
+    aiSummariesAllowed: Infinity, // Temporarily unlimited for testing
+    aiMessagesPreview: Infinity, // Temporarily unlimited for testing
     analyticsHistoryDays: 7,
     contributionGraphDays: 30,
     insightsPreview: 1,

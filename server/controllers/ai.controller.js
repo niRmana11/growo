@@ -32,10 +32,10 @@ export const getWeeklySummary = async (req, res) => {
     // Ask Gemini for the summary
     const summary = await aiService.generateWeeklySummary(user, habits, logs);
 
-    // Track usage for free users
+    // Track usage for free users using atomic $inc to prevent VersionError crashes
     if (user.plan === 'free') {
-      user.aiSummariesUsed += 1;
-      await user.save();
+      await User.updateOne({ _id: user._id }, { $inc: { aiSummariesUsed: 1 } });
+      user.aiSummariesUsed += 1; // update local object for the response below
     }
 
     return res.status(200).json({
@@ -85,8 +85,7 @@ export const chatWithCoach = async (req, res) => {
     const reply = await aiService.generateCoachReply(user, habits, recentLogs, message);
 
     if (user.plan === 'free') {
-      user.aiMessagesUsed += 1;
-      await user.save();
+      await User.updateOne({ _id: user._id }, { $inc: { aiMessagesUsed: 1 } });
     }
 
     return res.status(200).json({
