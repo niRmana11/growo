@@ -15,6 +15,7 @@ import checkIcon from '../assets/icons/check.png';
 import bestIcon from '../assets/icons/best.png';
 import { TodayProgress } from '../components/dashboard/TodayProgress.jsx';
 import { ContributionGraph } from '../components/dashboard/ContributionGraph.jsx';
+import { WeeklySummary } from '../components/ai/WeeklySummary.jsx';
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -228,6 +229,9 @@ export function Dashboard() {
                 </div>
               </div>
             </div>
+
+            {/* AI Weekly Summary Card */}
+            <WeeklySummary />
 
             {/* Contribution Graph at the bottom of the sidebar */}
             <ContributionGraph
