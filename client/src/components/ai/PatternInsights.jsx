@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { getInsights } from '../../services/aiService.js';
 import { Lightbulb, Lock } from 'lucide-react';
+import { useAuth } from '../../hooks/useAuth.js';
+import { PLANS } from '../../constants/plans.js';
 
 export function PatternInsights() {
+  const { user } = useAuth();
   const [insights, setInsights] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -46,7 +49,11 @@ export function PatternInsights() {
       ) : (
         <ul className="space-y-4">
           {insights.map((insight, index) => {
-            const isBlurred = insight === 'BLURRED';
+            // Check the user's plan limits. If they have no plan somehow, default to free.
+            const allowedPreview = PLANS[user?.plan || 'free'].insightsPreview;
+            // Blur anything that is equal to or higher than their allowed preview count
+            const isBlurred = index >= allowedPreview;
+
             return (
               <li key={index} className="flex gap-3 items-start relative">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs font-bold mt-0.5">
@@ -54,10 +61,10 @@ export function PatternInsights() {
                 </span>
 
                 {isBlurred ? (
-                  <div className="flex-1 relative cursor-not-allowed">
-                    <p className="text-gray-900 text-sm leading-relaxed blur-[4px] select-none opacity-40">
-                      This is a fake blurred insight to show the user that there is incredibly
-                      valuable personalized data waiting for them if they upgrade to the Pro plan.
+                  <div className="flex-1 relative cursor-not-allowed group">
+                    {/* Notice we are rendering the REAL {insight} text, but blurring it with CSS! */}
+                    <p className="text-gray-900 text-sm leading-relaxed blur-[5px] select-none opacity-40 transition-all group-hover:blur-[6px]">
+                      {insight}
                     </p>
                     <div className="absolute inset-0 flex items-center justify-center z-10">
                       <div className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full border border-gray-200 shadow-sm flex items-center gap-1 hover:bg-gray-50 transition-colors">

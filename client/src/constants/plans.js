@@ -8,7 +8,7 @@ export const PLANS = {
     aiMessagesPreview: 3,
     analyticsHistoryDays: 7,
     contributionGraphDays: 30,
-    insightsPreview: 1,
+    insightsPreview: 3,
     defaultCategories: ['coding', 'learning', 'health', 'reading'],
   },
   pro: {

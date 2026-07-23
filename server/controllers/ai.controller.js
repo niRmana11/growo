@@ -109,15 +109,10 @@ export const getInsights = async (req, res) => {
     // Generate 3 insights
     const allInsights = await aiService.generateInsights(user, habits, logs);
 
-    // Soft Gate: Show 1, hide the rest! (Trigger 5)
-    let finalInsights = allInsights;
-    if (user.plan === 'free') {
-      finalInsights = [allInsights[0], 'BLURRED', 'BLURRED'];
-    }
-
+    // Send the real insights to the frontend (frontend will blur them based on plan)
     return res.status(200).json({
       success: true,
-      data: finalInsights,
+      data: allInsights,
     });
   } catch (error) {
     console.error('Insights error:', error);
