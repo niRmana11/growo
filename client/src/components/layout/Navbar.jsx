@@ -1,4 +1,5 @@
-import { LogOut } from 'lucide-react';
+import { LogOut, Bot } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import growoLogo from '../../assets/growo-logo.png';
 
 export function Navbar({ user, onLogout }) {
@@ -6,9 +7,10 @@ export function Navbar({ user, onLogout }) {
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div>
+          {/* Left side */}
+          <div className="flex items-center gap-8">
+            {/* Logo */}
+            <Link to="/dashboard" className="block">
               <img src={growoLogo} alt="GrowO Logo" className="h-12 w-auto" />
               <p className="text-xs mt-1 font-medium">
                 <span className="text-green-600">Grow</span>
@@ -16,7 +18,15 @@ export function Navbar({ user, onLogout }) {
                 <span className="text-green-600">Go</span>
                 <span className="text-gray-900"> every day.</span>
               </p>
-            </div>
+            </Link>
+            {/* AI Coach */}
+            <Link
+              to="/coach"
+              className="hidden md:flex items-center gap-2 px-3 py-2 text-indigo-600 font-medium hover:bg-indigo-50 rounded-lg transition-colors"
+            >
+              <Bot size={18} />
+              AI Coach
+            </Link>
           </div>
 
           {/* Right side */}
