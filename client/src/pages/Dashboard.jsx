@@ -16,6 +16,7 @@ import bestIcon from '../assets/icons/best.png';
 import { TodayProgress } from '../components/dashboard/TodayProgress.jsx';
 import { ContributionGraph } from '../components/dashboard/ContributionGraph.jsx';
 import { WeeklySummary } from '../components/ai/WeeklySummary.jsx';
+import { PatternInsights } from '../components/ai/PatternInsights.jsx';
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -232,6 +233,9 @@ export function Dashboard() {
 
             {/* AI Weekly Summary Card */}
             <WeeklySummary />
+
+            {/* AI Pattern Insights Card */}
+            <PatternInsights />
 
             {/* Contribution Graph at the bottom of the sidebar */}
             <ContributionGraph

@@ -5,7 +5,22 @@ const getClient = () => {
   return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 };
 
-const MODEL = 'gemini-flash-latest';
+const MODEL = 'gemini-3.5-flash-lite';
+
+// Simple async queue to prevent Gemini Free Tier concurrency limits
+let aiQueue = Promise.resolve();
+
+const queueRequest = (requestFn) => {
+  return new Promise((resolve, reject) => {
+    aiQueue = aiQueue.then(async () => {
+      try {
+        resolve(await requestFn());
+      } catch (e) {
+        reject(e);
+      }
+    });
+  });
+};
 
 // ─── 1. Weekly Summary ───────────────────────────────────────────────────────────
 export const generateWeeklySummary = async (user, habits, logs) => {
@@ -35,11 +50,12 @@ Write a weekly coaching summary that:
 Keep it under 150 words. Sound human, not robotic. Do not use markdown formatting.
   `;
 
-  const result = await getClient().models.generateContent({
-    model: MODEL,
-    contents: prompt,
-  });
-
+  const result = await queueRequest(() =>
+    getClient().models.generateContent({
+      model: MODEL,
+      contents: prompt,
+    })
+  );
   return result.text;
 };
 
@@ -66,10 +82,12 @@ Their message: "${userMessage}"
 Respond as a coach who knows their numbers. Be direct, specific, and keep your answer under 100 words.
   `;
 
-  const result = await getClient().models.generateContent({
-    model: MODEL,
-    contents: prompt,
-  });
+  const result = await queueRequest(() =>
+    getClient().models.generateContent({
+      model: MODEL,
+      contents: prompt,
+    })
+  );
 
   return result.text;
 };
@@ -103,12 +121,15 @@ Return as a JSON array of strings: ["insight1", "insight2", "insight3"]
 Return ONLY the JSON array, no backticks, no markdown, no other text.
   `;
 
-  const result = await getClient().models.generateContent({
-    model: MODEL,
-    contents: prompt,
-  });
+  const result = await queueRequest(() =>
+    getClient().models.generateContent({
+      model: MODEL,
+      contents: prompt,
+    })
+  );
 
   const text = result.text.trim();
+
   const clean = text.replace(/```json|```/g, '').trim();
   return JSON.parse(clean);
 };
