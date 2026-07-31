@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 import { Navbar } from '../components/layout/Navbar.jsx';
 import { chatWithCoach } from '../services/aiService.js';
+import { IoLogoOctocat } from 'react-icons/io5';
 import { Send, Sparkles, User, Lock, Bot, ArrowLeft } from 'lucide-react';
 
 export function Coach() {
@@ -85,8 +86,8 @@ export function Coach() {
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm flex-shrink-0">
-              <Sparkles className="text-white w-5 h-5" />
+            <div className="bg-white/10 p-2 rounded-lg backdrop-blur-sm flex-shrink-0">
+              <IoLogoOctocat color="white" />
             </div>
             <div>
               <h2 className="text-white font-bold text-lg leading-tight">GrowO Coach</h2>
@@ -110,7 +111,7 @@ export function Coach() {
                     {msg.sender === 'user' ? (
                       <User size={16} className="text-white" />
                     ) : (
-                      <Bot size={16} className="text-white" />
+                      <IoLogoOctocat color="white" />
                     )}
                   </div>
                   <div

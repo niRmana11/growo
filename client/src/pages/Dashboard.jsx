@@ -5,6 +5,8 @@ import { useHabits } from '../hooks/useHabits.js';
 import * as habitService from '../services/habitService.js';
 import { HabitList } from '../components/habits/HabitList.jsx';
 import { HabitModal } from '../components/habits/HabitModal.jsx';
+import { IoLogoOctocat } from 'react-icons/io5';
+import { BiCircle } from 'react-icons/bi';
 import { LogOut, Plus, TrendingUp, Flame, Sparkles, Bot } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Navbar } from '../components/layout/Navbar.jsx';
@@ -145,7 +147,7 @@ export function Dashboard() {
               to="/coach"
               className="flex items-center gap-2 px-4 py-2 text-green-700 bg-green-100 font-medium hover:bg-green-200 rounded-lg transition-colors border border-green-200 shadow-sm"
             >
-              <Bot size={18} />
+              <IoLogoOctocat />
               GrowO Coach
             </Link>
             {/* AI Insights Button */}
@@ -153,7 +155,7 @@ export function Dashboard() {
               onClick={() => setIsDrawerOpen(true)}
               className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-medium rounded-lg shadow hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
-              <Sparkles size={18} />
+              <BiCircle />
               AI Insights
             </button>
           </div>

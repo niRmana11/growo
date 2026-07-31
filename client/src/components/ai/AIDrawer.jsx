@@ -1,6 +1,7 @@
 import { X, Sparkles, ArrowRight } from 'lucide-react';
 import { WeeklySummary } from './WeeklySummary.jsx';
 import { PatternInsights } from './PatternInsights.jsx';
+import { BiCircle } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 
 export function AIDrawer({ isOpen, onClose }) {
@@ -22,7 +23,7 @@ export function AIDrawer({ isOpen, onClose }) {
         <div className="bg-white  p-4 flex items-center justify-between sticky top-0 z-10">
           <div className="flex items-center gap-2">
             <div className="bg-emerald-100 p-1.5 rounded-lg">
-              <Sparkles className="w-5 h-5 text-emerald-600" />
+              <BiCircle size={20} color="green" />
             </div>
             <h2 className="text-lg font-bold text-gray-900">GrowO Assistant</h2>
           </div>

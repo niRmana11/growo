@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { getWeeklySummary } from '../../services/aiService.js';
 import { Sparkles, Lock } from 'lucide-react';
+import { BiCircle } from 'react-icons/bi';
 
 export function WeeklySummary() {
   const [summary, setSummary] = useState('');
@@ -38,7 +39,9 @@ export function WeeklySummary() {
   return (
     <div className="bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-100 rounded-lg p-6 shadow-sm relative overflow-hidden">
       <div className="flex items-center gap-2 mb-4">
-        <Sparkles className="text-emerald-600 w-5 h-5" />
+        <div className="bg-emerald-100 p-1.5 rounded-lg">
+          <BiCircle size={20} color="green" />
+        </div>
         <h3 className="text-lg font-bold text-emerald-900">GrowO Weekly Insights</h3>
       </div>
 
