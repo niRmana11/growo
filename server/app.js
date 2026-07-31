@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes.js';
 import habitRoutes from './routes/habit.routes.js';
+import aiRoutes from './routes/ai.routes.js';
 
 const app = express();
 
@@ -55,6 +56,9 @@ app.use('/api/auth', authRoutes);
 
 // Habit routes
 app.use('/api/habits', habitRoutes);
+
+// AI routes
+app.use('/api/ai', aiRoutes);
 
 // Error handling
 app.use((req, res) => {

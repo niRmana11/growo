@@ -5,7 +5,7 @@ import { useHabits } from '../hooks/useHabits.js';
 import * as habitService from '../services/habitService.js';
 import { HabitList } from '../components/habits/HabitList.jsx';
 import { HabitModal } from '../components/habits/HabitModal.jsx';
-import { LogOut, Plus, TrendingUp, Flame } from 'lucide-react';
+import { LogOut, Plus, TrendingUp, Flame, Sparkles } from 'lucide-react';
 import { Navbar } from '../components/layout/Navbar.jsx';
 import { Footer } from '../components/layout/Footer.jsx';
 import growoLogo from '../assets/growo-logo.png';
@@ -15,6 +15,7 @@ import checkIcon from '../assets/icons/check.png';
 import bestIcon from '../assets/icons/best.png';
 import { TodayProgress } from '../components/dashboard/TodayProgress.jsx';
 import { ContributionGraph } from '../components/dashboard/ContributionGraph.jsx';
+import { AIDrawer } from '../components/ai/AIDrawer.jsx';
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ export function Dashboard() {
   const [editingHabit, setEditingHabit] = useState(null);
   const [stats, setStats] = useState({ totalHabits: 0, maxStreak: 0, totalCompletions: 0 });
   const [globalStats, setGlobalStats] = useState({ currentStreak: 0, maxStreak: 0, logDates: [] });
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Load habits on mount
   useEffect(() => {
@@ -185,6 +187,13 @@ export function Dashboard() {
 
           {/* RIGHT COLUMN: Analytics (Takes up 1/3 of space on desktop) */}
           <div className="w-full lg:w-1/3 flex flex-col order-2 gap-6">
+            {/* Contribution Graph at the bottom of the sidebar */}
+            <ContributionGraph
+              logDates={globalStats.logDates}
+              totalHabits={stats.totalHabits}
+              userCreatedAt={user?.createdAt}
+            />
+
             {/* Stats cards (Stacked vertically) */}
             <div className="flex flex-col gap-4">
               <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
@@ -228,13 +237,6 @@ export function Dashboard() {
                 </div>
               </div>
             </div>
-
-            {/* Contribution Graph at the bottom of the sidebar */}
-            <ContributionGraph
-              logDates={globalStats.logDates}
-              totalHabits={stats.totalHabits}
-              userCreatedAt={user?.createdAt}
-            />
           </div>
         </div>
       </main>
@@ -250,6 +252,20 @@ export function Dashboard() {
         onSubmit={handleModalSubmit}
         isLoading={isLoading}
       />
+
+      {/* Floating AI Button */}
+      <button
+        onClick={() => setIsDrawerOpen(true)}
+        className="fixed bottom-8 right-8 bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all z-30 group flex items-center justify-center gap-2"
+      >
+        <Sparkles className="w-6 h-6" />
+        <span className="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-300 ease-in-out font-bold px-0 group-hover:px-2">
+          AI Insights
+        </span>
+      </button>
+
+      {/* The AI Drawer */}
+      <AIDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
     </div>
   );
 }
