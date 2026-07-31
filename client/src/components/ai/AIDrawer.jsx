@@ -19,12 +19,12 @@ export function AIDrawer({ isOpen, onClose }) {
         className={`fixed inset-y-0 right-0 w-full md:w-[450px] bg-gray-50 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* Header */}
-        <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between sticky top-0 z-10">
+        <div className="bg-white  p-4 flex items-center justify-between sticky top-0 z-10">
           <div className="flex items-center gap-2">
-            <div className="bg-indigo-100 p-1.5 rounded-lg">
-              <Sparkles className="w-5 h-5 text-indigo-600" />
+            <div className="bg-emerald-100 p-1.5 rounded-lg">
+              <Sparkles className="w-5 h-5 text-emerald-600" />
             </div>
-            <h2 className="text-lg font-bold text-gray-900">AI Assistant</h2>
+            <h2 className="text-lg font-bold text-gray-900">GrowO Assistant</h2>
           </div>
           <button
             onClick={onClose}
@@ -41,14 +41,14 @@ export function AIDrawer({ isOpen, onClose }) {
           <PatternInsights />
 
           {/* Upsell / Link to full coach */}
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl p-6 text-white shadow-md text-center mt-8">
+          <div className="bg-gradient-to-r from-emerald-600 to-green-600 rounded-xl p-6 text-white shadow-md text-center mt-8">
             <h3 className="font-bold text-lg mb-2">Need more help?</h3>
             <p className="text-indigo-100 text-sm mb-4">
-              Chat directly with your personalized AI Growth Coach to dive deeper into your habits.
+              Chat directly with your personalized GrowO Coach to dive deeper into your habits.
             </p>
             <Link
               to="/coach"
-              className="inline-flex items-center gap-2 bg-white text-indigo-600 px-6 py-2.5 rounded-lg font-semibold hover:bg-indigo-50 transition-colors shadow-sm hover:shadow"
+              className="inline-flex items-center gap-2 bg-white text-emerald-600 px-6 py-2.5 rounded-lg font-semibold hover:bg-emerald-50 transition-colors shadow-sm hover:shadow"
             >
               Open Coach Chat
               <ArrowRight className="w-4 h-4" />
