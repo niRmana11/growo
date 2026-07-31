@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 import { Navbar } from '../components/layout/Navbar.jsx';
 import { chatWithCoach } from '../services/aiService.js';
-import { Send, Sparkles, User, Lock, Bot } from 'lucide-react';
+import { Send, Sparkles, User, Lock, Bot, ArrowLeft } from 'lucide-react';
 
 export function Coach() {
   const { user, logout } = useAuth();
@@ -14,7 +14,7 @@ export function Coach() {
     {
       id: 1,
       sender: 'coach',
-      text: `Hi ${user?.name || 'there'}! I'm your AI Growth Coach. I've been analyzing your habit logs. What would you like to focus on today?`,
+      text: `Hi ${user?.name || 'there'}! I'm your GrowO Coach. I've been analyzing your habit logs. What would you like to focus on today?`,
     },
   ]);
   const [input, setInput] = useState('');
@@ -77,13 +77,20 @@ export function Coach() {
       <main className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col h-[calc(100vh-80px)]">
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden relative">
           {/* Chat Header */}
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 flex items-center gap-3">
-            <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-              <Sparkles className="text-white w-6 h-6" />
+          <div className="bg-gradient-to-r from-emerald-600 to-green-500 p-4 flex items-center gap-3">
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="bg-white/10 hover:bg-white/20 p-2 rounded-full backdrop-blur-sm transition-colors text-white flex-shrink-0 mr-1"
+              title="Back to Dashboard"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm flex-shrink-0">
+              <Sparkles className="text-white w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-white font-bold text-lg">AI Growth Coach</h2>
-              <p className="text-indigo-100 text-sm opacity-90">Powered by Gemini 1.5</p>
+              <h2 className="text-white font-bold text-lg leading-tight">GrowO Coach</h2>
+              <p className="text-indigo-100 text-xs font-medium">Powered by Gemini 3.5 Lite</p>
             </div>
           </div>
 
@@ -98,7 +105,7 @@ export function Coach() {
                   className={`flex gap-3 max-w-[80%] ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
                 >
                   <div
-                    className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${msg.sender === 'user' ? 'bg-green-600' : 'bg-indigo-600'}`}
+                    className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${msg.sender === 'user' ? 'bg-emerald-700' : 'bg-green-500'}`}
                   >
                     {msg.sender === 'user' ? (
                       <User size={16} className="text-white" />
@@ -167,12 +174,12 @@ export function Coach() {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask your coach anything..."
                 disabled={isLoading || isGated}
-                className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white transition-colors disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isLoading || isGated}
-                className="bg-indigo-600 text-white px-5 rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:hover:bg-indigo-600 flex items-center justify-center"
+                className="bg-green-600 text-white px-5 rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50 disabled:hover:bg-green-600 flex items-center justify-center"
               >
                 <Send size={20} />
               </button>

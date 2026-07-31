@@ -22,10 +22,10 @@ export function Navbar({ user, onLogout }) {
             {/* AI Coach */}
             <Link
               to="/coach"
-              className="hidden md:flex items-center gap-2 px-3 py-2 text-indigo-600 font-medium hover:bg-indigo-50 rounded-lg transition-colors"
+              className="hidden md:flex items-center gap-2 px-3 py-2 text-green-600 bg-green-100 font-medium hover:bg-green-200 rounded-lg transition-colors"
             >
               <Bot size={18} />
-              AI Coach
+              GrowO Coach
             </Link>
           </div>
 
