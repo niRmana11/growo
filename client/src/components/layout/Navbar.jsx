@@ -1,4 +1,4 @@
-import { LogOut, Bot } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import growoLogo from '../../assets/growo-logo.png';
 
@@ -18,14 +18,6 @@ export function Navbar({ user, onLogout }) {
                 <span className="text-green-600">Go</span>
                 <span className="text-gray-900"> every day.</span>
               </p>
-            </Link>
-            {/* AI Coach */}
-            <Link
-              to="/coach"
-              className="hidden md:flex items-center gap-2 px-3 py-2 text-green-600 bg-green-100 font-medium hover:bg-green-200 rounded-lg transition-colors"
-            >
-              <Bot size={18} />
-              GrowO Coach
             </Link>
           </div>
 

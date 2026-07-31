@@ -5,7 +5,8 @@ import { useHabits } from '../hooks/useHabits.js';
 import * as habitService from '../services/habitService.js';
 import { HabitList } from '../components/habits/HabitList.jsx';
 import { HabitModal } from '../components/habits/HabitModal.jsx';
-import { LogOut, Plus, TrendingUp, Flame, Sparkles } from 'lucide-react';
+import { LogOut, Plus, TrendingUp, Flame, Sparkles, Bot } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Navbar } from '../components/layout/Navbar.jsx';
 import { Footer } from '../components/layout/Footer.jsx';
 import growoLogo from '../assets/growo-logo.png';
@@ -131,10 +132,31 @@ export function Dashboard() {
       {/* Main content */}
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}!</h2>
-          <p className="text-gray-600 mt-2">Track your daily habits and build consistency</p>
+        {/* Welcome section with AI Actions */}
+        <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}!</h2>
+            <p className="text-gray-600 mt-2">Track your daily habits and build consistency</p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* GrowO Coach Button */}
+            <Link
+              to="/coach"
+              className="flex items-center gap-2 px-4 py-2 text-green-700 bg-green-100 font-medium hover:bg-green-200 rounded-lg transition-colors border border-green-200 shadow-sm"
+            >
+              <Bot size={18} />
+              GrowO Coach
+            </Link>
+            {/* AI Insights Button */}
+            <button
+              onClick={() => setIsDrawerOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-medium rounded-lg shadow hover:shadow-lg hover:-translate-y-0.5 transition-all"
+            >
+              <Sparkles size={18} />
+              AI Insights
+            </button>
+          </div>
         </div>
 
         {/* Error message */}
@@ -252,17 +274,6 @@ export function Dashboard() {
         onSubmit={handleModalSubmit}
         isLoading={isLoading}
       />
-
-      {/* Floating AI Button */}
-      <button
-        onClick={() => setIsDrawerOpen(true)}
-        className="fixed bottom-8 right-8 bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all z-30 group flex items-center justify-center gap-2"
-      >
-        <Sparkles className="w-6 h-6" />
-        <span className="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-300 ease-in-out font-bold px-0 group-hover:px-2">
-          AI Insights
-        </span>
-      </button>
 
       {/* The AI Drawer */}
       <AIDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
