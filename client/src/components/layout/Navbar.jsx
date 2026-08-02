@@ -1,4 +1,4 @@
-import { LogOut } from 'lucide-react';
+import { LogOut, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import growoLogo from '../../assets/growo-logo.png';
 
@@ -22,13 +22,26 @@ export function Navbar({ user, onLogout }) {
           </div>
 
           {/* Right side */}
-          <button
-            onClick={onLogout}
-            className="flex items-center gap-2 px-4 py-2 text-gray-600 font-medium hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-          >
-            <LogOut size={18} />
-            Logout
-          </button>
+          <div className="flex items-center gap-3">
+            {/* Show Upgrade button ONLY if user is not already PRO */}
+            {user?.plan !== 'pro' && (
+              <Link
+                to="/pricing"
+                className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-amber-200 to-yellow-400 text-yellow-900 px-4 py-2 rounded-full font-bold text-sm shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
+              >
+                <Sparkles size={16} />
+                Upgrade to Pro
+              </Link>
+            )}
+
+            <button
+              onClick={onLogout}
+              className="flex items-center gap-2 px-4 py-2 text-gray-600 font-medium hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+            >
+              <LogOut size={18} />
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </header>
