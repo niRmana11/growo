@@ -5,7 +5,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const createCheckoutSession = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.userId;
 
     // We create an inline price dynamically for the checkout session
     const session = await stripe.checkout.sessions.create({
