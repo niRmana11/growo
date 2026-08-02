@@ -37,7 +37,7 @@ export function WeeklySummary() {
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-100 rounded-lg p-6 shadow-sm relative overflow-hidden">
+    <div className="bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-100 rounded-lg p-6 shadow-sm relative overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
       <div className="flex items-center gap-2 mb-4">
         <div className="bg-emerald-100 p-1.5 rounded-lg">
           <BiCircle size={20} color="green" />

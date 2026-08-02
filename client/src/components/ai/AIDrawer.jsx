@@ -42,7 +42,7 @@ export function AIDrawer({ isOpen, onClose }) {
           <PatternInsights />
 
           {/* Upsell / Link to full coach */}
-          <div className="bg-gradient-to-r from-emerald-600 to-green-600 rounded-xl p-6 text-white shadow-md text-center mt-8">
+          <div className="bg-gradient-to-r from-emerald-600 to-green-600 rounded-xl p-6 text-white shadow-md text-center mt-8 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
             <h3 className="font-bold text-lg mb-2">Need more help?</h3>
             <p className="text-indigo-100 text-sm mb-4">
               Chat directly with your personalized GrowO Coach to dive deeper into your habits.
