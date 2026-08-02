@@ -32,7 +32,7 @@ export function PatternInsights() {
   }, []);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6 shadow-sm">
+    <div className="bg-white  rounded-lg p-6 mb-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
       <div className="flex items-center gap-2 mb-4">
         <Lightbulb className="text-amber-500 w-5 h-5" />
         <h3 className="text-lg font-bold text-gray-900">Deep Pattern Insights</h3>
