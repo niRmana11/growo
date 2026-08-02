@@ -11,7 +11,7 @@ export function Pricing() {
   const handleUpgrade = async () => {
     try {
       setIsLoading(true);
-      const res = await api.post('/stripe/create-checkout-session');
+      const res = await api.post('/lemonsqueezy/create-checkout');
       if (res.data.url) {
         window.location.href = res.data.url; // Redirect immediately to Stripe Checkout!
       }

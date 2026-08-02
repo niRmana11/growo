@@ -10,7 +10,7 @@ export function UpgradeModal({ isOpen, onClose, featureName = 'This feature' }) 
   const handleUpgrade = async () => {
     try {
       setIsLoading(true);
-      const res = await api.post('/stripe/create-checkout-session');
+      const res = await api.post('/lemonsqueezy/create-checkout');
       if (res.data.url) {
         window.location.href = res.data.url;
       }
@@ -68,7 +68,7 @@ export function UpgradeModal({ isOpen, onClose, featureName = 'This feature' }) 
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Upgrade Now for $9/mo'}
           </button>
 
-          <p className="text-center text-xs text-gray-400 mt-4">Secure payment powered by Stripe</p>
+          <p className="text-center text-xs text-gray-400 mt-4">Secure payment powered by Lemon Squeezy</p>
         </div>
       </div>
     </div>

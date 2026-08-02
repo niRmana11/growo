@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes.js';
 import habitRoutes from './routes/habit.routes.js';
 import aiRoutes from './routes/ai.routes.js';
-import stripeRoutes from './routes/stripe.routes.js';
+import lemonsqueezyRoutes from './routes/lemonsqueezy.routes.js';
 
 const app = express();
 
@@ -19,8 +19,8 @@ app.use(
   })
 );
 
-// STRIPE WEBHOOK ROUTE (Must be mounted BEFORE express.json())
-app.use('/api/stripe', stripeRoutes);
+// LEMON SQUEEZY WEBHOOK ROUTE (Must be mounted BEFORE express.json())
+app.use('/api/lemonsqueezy', lemonsqueezyRoutes);
 
 // Logging & parsing middleware
 app.use(morgan('dev'));
