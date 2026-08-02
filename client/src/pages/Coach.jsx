@@ -5,6 +5,7 @@ import { Navbar } from '../components/layout/Navbar.jsx';
 import { chatWithCoach } from '../services/aiService.js';
 import { IoLogoOctocat } from 'react-icons/io5';
 import { Send, Sparkles, User, Lock, Bot, ArrowLeft } from 'lucide-react';
+import { UpgradeModal } from '../components/common/UpgradeModel.jsx';
 
 export function Coach() {
   const { user, logout } = useAuth();
@@ -22,6 +23,7 @@ export function Coach() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGated, setIsGated] = useState(false);
   const [gatedMessage, setGatedMessage] = useState('');
+  const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
 
   const messagesEndRef = useRef(null);
 
@@ -153,13 +155,16 @@ export function Coach() {
           {/* Gated Lock Screen Overlay */}
           {isGated && (
             <div className="absolute inset-0 bg-white/60 backdrop-blur-md flex flex-col items-center justify-center z-20">
-              <div className="bg-white p-8 rounded-2xl shadow-xl text-center max-w-md border border-indigo-100 mx-4">
-                <div className="bg-indigo-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Lock className="w-8 h-8 text-indigo-600" />
+              <div className="bg-white p-8 rounded-2xl shadow-xl text-center max-w-md border border-emerald-100 mx-4">
+                <div className="bg-emerald-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Lock className="w-8 h-8 text-emerald-600" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Conversation Limit Reached</h3>
                 <p className="text-gray-600 mb-6">{gatedMessage}</p>
-                <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-6 rounded-xl hover:opacity-90 transition-opacity shadow-md hover:shadow-lg">
+                <button
+                  onClick={() => setIsUpgradeOpen(true)}
+                  className="w-full bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold py-3 px-6 rounded-xl hover:opacity-90 transition-opacity shadow-md hover:shadow-lg"
+                >
                   Upgrade to Pro
                 </button>
               </div>
@@ -188,6 +193,11 @@ export function Coach() {
           </div>
         </div>
       </main>
+      <UpgradeModal
+        isOpen={isUpgradeOpen}
+        onClose={() => setIsUpgradeOpen(false)}
+        featureName="Unlimited AI Growth Coaching"
+      />
     </div>
   );
 }
