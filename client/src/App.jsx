@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
 import { useAuth } from './hooks/useAuth';
+import { Landing } from './pages/Landing';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
@@ -41,8 +42,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Root - redirects based on auth */}
-        <Route path="/" element={<RootRedirect />} />
+        {/* Root - Shows Landing Page if logged out, or Dashboard if logged in */}
+        <Route path="/" element={<Landing />} />
 
         {/* Public routes */}
         <Route path="/login" element={<Login />} />
