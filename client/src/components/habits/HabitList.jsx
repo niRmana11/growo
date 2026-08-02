@@ -42,7 +42,7 @@ export function HabitList({ habits, isLoading, onMarkComplete, onEdit, onDelete,
             className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors text-sm font-medium ${
               filter === cat.value
                 ? 'bg-green-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                : 'bg-gray-100 text-gray-700 hover:bg-green-100'
             }`}
           >
             {cat.label}

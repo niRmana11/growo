@@ -1,4 +1,7 @@
 import { Edit2, RotateCcw, Trash2 } from 'lucide-react';
+import { FaPencil } from 'react-icons/fa6';
+import { BsFillTrash3Fill } from 'react-icons/bs';
+
 import { getHabitIcon } from '../../utils/habitIcons.js';
 
 // after the testing completed remove onReset
@@ -28,7 +31,7 @@ export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, is
     <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
       {/* HEADER */}
       <div className="flex items-start justify-between mb-3">
-        <div className="flex items-start gap-3 flex-1">
+        <div className="flex items-center gap-3 flex-1">
           {/* HABIT ICON (PNG ONLY) */}
           <img
             src={icon?.src}
@@ -38,7 +41,6 @@ export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, is
 
           <div className="flex-1">
             <h3 className="font-semibold text-gray-900">{habit.name}</h3>
-            {habit.description && <p className="text-sm text-gray-600 mt-1">{habit.description}</p>}
           </div>
         </div>
 
@@ -46,11 +48,11 @@ export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, is
         <div className="flex gap-2">
           <button
             onClick={() => onEdit(habit)}
-            className="p-1.5 hover:bg-gray-100 rounded transition-colors"
+            className="p-1.5 text-gray hover:bg-yellow-50 hover:text-yellow-800 rounded transition-colors"
             title="Edit habit"
             disabled={isLoading}
           >
-            <Edit2 size={16} className="text-gray-500" />
+            <FaPencil size={16} />
           </button>
 
           <button
@@ -64,17 +66,21 @@ export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, is
 
           <button
             onClick={() => onDelete(habit._id)}
-            className="p-1.5 hover:bg-red-50 rounded transition-colors"
+            className="p-1.5 text-gray hover:bg-red-50 hover:text-red-600 rounded transition-colors"
             title="Delete habit"
             disabled={isLoading}
           >
-            <Trash2 size={16} className="text-gray-400 hover:text-red-500" />
+            <BsFillTrash3Fill size={16} />
           </button>
         </div>
       </div>
 
+      <div>
+        {habit.description && <p className="text-sm text-gray-600 mt-1">{habit.description}</p>}
+      </div>
+
       {/* CATEGORY */}
-      <div className="mb-3">
+      <div className="my-3">
         <span
           className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium border ${getCategoryBadgeColor()}`}
         >
@@ -90,7 +96,7 @@ export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, is
         </div>
 
         <div className="text-center">
-          <div className="text-2xl font-bold text-gray-700">{habit.bestStreak}</div>
+          <div className="text-2xl font-bold text-amber-500">{habit.bestStreak}</div>
           <div className="text-xs text-gray-600">Best</div>
         </div>
 
