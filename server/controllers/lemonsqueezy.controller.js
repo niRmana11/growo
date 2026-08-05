@@ -2,28 +2,27 @@ import { lemonSqueezySetup, createCheckout } from '@lemonsqueezy/lemonsqueezy.js
 import User from '../models/User.js';
 import crypto from 'crypto';
 
-// Setup Lemon Squeezy with the API key from environment variables
-// It will silently fail on boot if missing, but we handle it in the endpoint
-const apiKey = process.env.LEMON_SQUEEZY_API_KEY;
-if (apiKey) {
-  lemonSqueezySetup({
-    apiKey: apiKey,
-    onError: (error) => console.error("Lemon Squeezy Error:", error),
-  });
-}
-
 export const createCheckoutSession = async (req, res) => {
   try {
+    // setup lemonsqueezy at runtime so process.env is loaded
+    lemonSqueezySetup({
+      apiKey: process.env.LEMON_SQUEEZY_API_KEY,
+      onError: (error) => console.error('Lemon Squeezy Error:', error),
+    });
     const userId = req.userId;
-    
+
     // We need the Store ID and Variant ID to create a checkout
     // These will come from your Lemon Squeezy dashboard!
     const storeId = process.env.LEMON_SQUEEZY_STORE_ID;
     const variantId = process.env.LEMON_SQUEEZY_VARIANT_ID; // The ID of your "GrowO Pro" product
 
     if (!storeId || !variantId || !process.env.LEMON_SQUEEZY_API_KEY) {
-      console.warn("Lemon Squeezy keys are missing! Simulating a 500 error so the frontend catches it gracefully.");
-      return res.status(500).json({ success: false, message: 'Payment gateway not fully configured yet.' });
+      console.warn(
+        'Lemon Squeezy keys are missing! Simulating a 500 error so the frontend catches it gracefully.'
+      );
+      return res
+        .status(500)
+        .json({ success: false, message: 'Payment gateway not fully configured yet.' });
     }
 
     const { data, error } = await createCheckout(storeId, variantId, {
@@ -34,7 +33,7 @@ export const createCheckoutSession = async (req, res) => {
       },
       checkoutOptions: {
         embed: false, // We'll just redirect them to the hosted page for now
-      }
+      },
     });
 
     if (error) {
@@ -55,7 +54,7 @@ export const handleWebhook = async (req, res) => {
     const signature = req.headers['x-signature'];
 
     if (!secret) {
-        return res.status(500).send('Webhook secret missing');
+      return res.status(500).send('Webhook secret missing');
     }
 
     // Verify the Lemon Squeezy signature using HMAC SHA256
@@ -63,7 +62,10 @@ export const handleWebhook = async (req, res) => {
     const digest = Buffer.from(hmac.update(req.body).digest('hex'), 'utf8');
     const signatureBuffer = Buffer.from(signature || '', 'utf8');
 
-    if (digest.length !== signatureBuffer.length || !crypto.timingSafeEqual(digest, signatureBuffer)) {
+    if (
+      digest.length !== signatureBuffer.length ||
+      !crypto.timingSafeEqual(digest, signatureBuffer)
+    ) {
       console.error('Lemon Squeezy Webhook signature verification failed');
       return res.status(400).send('Webhook signature verification failed');
     }
@@ -79,9 +81,9 @@ export const handleWebhook = async (req, res) => {
 
       if (userId) {
         // UPGRADE THE USER!
-        await User.findByIdAndUpdate(userId, { 
+        await User.findByIdAndUpdate(userId, {
           plan: 'pro',
-          stripeCustomerId: customerId.toString() // We can reuse this field for LS Customer ID
+          stripeCustomerId: customerId.toString(), // We can reuse this field for LS Customer ID
         });
         console.log(`User ${userId} successfully upgraded to PRO via Lemon Squeezy!`);
       }
