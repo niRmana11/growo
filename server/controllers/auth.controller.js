@@ -16,6 +16,7 @@ const setAuthCookie = (res, token) => {
     httpOnly: true, // Prevents JavaScript access (XSS protection)
     secure: process.env.NODE_ENV === 'production', // HTTPS only in production
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Required for cross-origin!    maxAge: 60 * 60 * 1000, // 1 hour
+    maxAge: 60 * 60 * 1000,
     path: '/',
   });
 };
