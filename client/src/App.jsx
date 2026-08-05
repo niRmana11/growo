@@ -7,6 +7,7 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { Coach } from './pages/Coach';
+import { Pricing } from './pages/Pricing';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
 // Root redirect - send to dashboard if logged in, else to login
@@ -63,6 +64,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Coach />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pricing"
+          element={
+            <ProtectedRoute>
+              <Pricing />
             </ProtectedRoute>
           }
         />
