@@ -15,8 +15,7 @@ const setAuthCookie = (res, token) => {
   res.cookie('authToken', token, {
     httpOnly: true, // Prevents JavaScript access (XSS protection)
     secure: process.env.NODE_ENV === 'production', // HTTPS only in production
-    sameSite: 'lax', // Allows cookies in cross-origin requests (needed for localhost development)
-    maxAge: 60 * 60 * 1000, // 1 hour
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Required for cross-origin!    maxAge: 60 * 60 * 1000, // 1 hour
     path: '/',
   });
 };
@@ -170,7 +169,7 @@ export const logout = async (req, res) => {
     res.clearCookie('authToken', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
     });
 

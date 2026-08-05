@@ -9,6 +9,10 @@ import aiRoutes from './routes/ai.routes.js';
 
 const app = express();
 
+// Trust proxy is required when hosting on platforms like Render or Heroku
+// so that Express knows it's behind a secure HTTPS proxy and can set secure cookies
+app.set('trust proxy', 1);
+
 // Security & CORS middleware
 app.use(helmet());
 app.use(
