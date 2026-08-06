@@ -19,6 +19,7 @@ import bestIcon from '../assets/icons/best.png';
 import { TodayProgress } from '../components/dashboard/TodayProgress.jsx';
 import { ContributionGraph } from '../components/dashboard/ContributionGraph.jsx';
 import { AIDrawer } from '../components/ai/AIDrawer.jsx';
+import { ConfirmDeleteModal } from '../components/habits/ConfirmDeleteModal.jsx';
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ export function Dashboard() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('create');
+  const [habitToDelete, setHabitToDelete] = useState(null);
   const [editingHabit, setEditingHabit] = useState(null);
   const [stats, setStats] = useState({ totalHabits: 0, maxStreak: 0, totalCompletions: 0 });
   const [globalStats, setGlobalStats] = useState({ currentStreak: 0, maxStreak: 0, logDates: [] });
@@ -101,10 +103,17 @@ export function Dashboard() {
     }
   };
 
-  // Handle delete
-  const handleDelete = async (habitId) => {
-    if (confirm('Are you sure you want to delete this habit?')) {
-      await remove(habitId);
+  // Open the custom delete modal
+  const handleDeleteClick = (habitId) => {
+    const habit = habits.find((h) => h._id === habitId);
+    setHabitToDelete(habit);
+  };
+
+  // Actually delete the habit when "Yes" is clicked
+  const confirmDelete = async () => {
+    if (habitToDelete) {
+      await remove(habitToDelete._id);
+      setHabitToDelete(null); // close modal
     }
   };
 
@@ -203,7 +212,7 @@ export function Dashboard() {
                 isLoading={isLoading}
                 onMarkComplete={handleMarkComplete}
                 onEdit={openEditModal}
-                onDelete={handleDelete}
+                onDelete={handleDeleteClick}
                 onReset={handleReset}
               />
             ) : null}
@@ -275,6 +284,14 @@ export function Dashboard() {
         onClose={() => setModalOpen(false)}
         onSubmit={handleModalSubmit}
         isLoading={isLoading}
+      />
+
+      {/* NEW Custom Delete Modal */}
+      <ConfirmDeleteModal
+        isOpen={!!habitToDelete}
+        onClose={() => setHabitToDelete(null)}
+        onConfirm={confirmDelete}
+        itemName={habitToDelete?.name}
       />
 
       {/* The AI Drawer */}

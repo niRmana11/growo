@@ -1,4 +1,3 @@
-import { Edit2, RotateCcw, Trash2 } from 'lucide-react';
 import { FaPencil } from 'react-icons/fa6';
 import { BsFillTrash3Fill } from 'react-icons/bs';
 
@@ -53,15 +52,6 @@ export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, is
             disabled={isLoading}
           >
             <FaPencil size={16} />
-          </button>
-
-          <button
-            onClick={() => onReset(habit._id)}
-            className="p-1.5 hover:bg-yellow-50 rounded transition-colors"
-            title="Reset for testing"
-            disabled={isLoading}
-          >
-            <RotateCcw size={16} className="text-gray-400 hover:text-yellow-600" />
           </button>
 
           <button

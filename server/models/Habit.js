@@ -66,6 +66,22 @@ const habitSchema = new mongoose.Schema(
 
 // Increment streak - called when user marks habit as complete
 habitSchema.methods.incrementStreak = function () {
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  // If we have completed this before, check if the streak was broken
+  if (this.lastCompletedAt) {
+    const lastDate = new Date(this.lastCompletedAt).toDateString();
+    const todayStr = today.toDateString();
+    const yesterdayStr = yesterday.toDateString();
+
+    // If the last completion was NOT today and NOT yesterday, you missed a day!
+    if (lastDate !== todayStr && lastDate !== yesterdayStr) {
+      this.currentStreak = 0; // Reset streak back to 0 before we add 1!
+    }
+  }
+
   this.currentStreak += 1;
 
   if (this.currentStreak > this.bestStreak) {
@@ -84,10 +100,27 @@ habitSchema.methods.resetStreak = function () {
 
 // Get habit statistics
 habitSchema.methods.getStats = function () {
+  let displayStreak = this.currentStreak;
+
+  // If checking the dashboard today, verify if the streak is already broken
+  if (this.lastCompletedAt) {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const lastDate = new Date(this.lastCompletedAt).toDateString();
+    if (lastDate !== today.toDateString() && lastDate !== yesterday.toDateString()) {
+      displayStreak = 0; // Show 0 on the UI because the streak is broken
+    }
+  }
+
   return {
+    _id: this._id,
     name: this.name,
+    description: this.description,
     category: this.category,
-    currentStreak: this.currentStreak,
+    icon: this.icon,
+    currentStreak: displayStreak,
     bestStreak: this.bestStreak,
     totalCompletions: this.completedDates.length,
     lastCompletedAt: this.lastCompletedAt,

@@ -23,8 +23,16 @@ export function Navbar({ user, onLogout }) {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
-            {/* Show Upgrade button ONLY if user is not already PRO */}
-            {user?.plan !== 'pro' && (
+            {/* Dynamic Plan Button */}
+            {user?.plan === 'pro' ? (
+              <Link
+                to="/pricing"
+                className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-4 py-2 rounded-full font-bold text-sm shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
+              >
+                <Sparkles size={16} />
+                GrowO Pro
+              </Link>
+            ) : (
               <Link
                 to="/pricing"
                 className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-amber-200 to-yellow-400 text-yellow-900 px-4 py-2 rounded-full font-bold text-sm shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"

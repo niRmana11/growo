@@ -23,14 +23,16 @@ app.use(
   })
 );
 
+// Logging & parsing middleware
+app.use(morgan('dev'));
+app.use(cookieParser()); // Move this UP here!
+
 // LEMON SQUEEZY WEBHOOK ROUTE (Must be mounted BEFORE express.json())
 app.use('/api/lemonsqueezy', lemonsqueezyRoutes);
 
-// Logging & parsing middleware
-app.use(morgan('dev'));
+// JSON parsers (Must be AFTER Lemon Squeezy so webhook gets raw body)
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ limit: '10kb', extended: true }));
-app.use(cookieParser()); // Parse cookies from requests
 
 // API routes
 app.get('/api/health', (req, res) => {
