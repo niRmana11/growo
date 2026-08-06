@@ -26,13 +26,18 @@ export function Pricing() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-green-200">
       <div className="max-w-7xl mx-auto">
-        <Link to="/dashboard" className="inline-flex items-center text-gray-500 hover:text-green-600 mb-8 transition-colors">
+        <Link
+          to="/dashboard"
+          className="inline-flex items-center text-gray-500 hover:text-green-600 mb-8 transition-colors"
+        >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Dashboard
         </Link>
-        
+
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Simple, transparent pricing</h1>
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
+            Simple, transparent pricing
+          </h1>
           <p className="text-xl text-gray-600">Invest in your personal growth. Cancel anytime.</p>
         </div>
 
@@ -45,21 +50,31 @@ export function Pricing() {
               <span className="text-gray-500 font-medium">/ forever</span>
             </div>
             <p className="text-gray-600 mb-8">Everything you need to track your daily habits.</p>
-            
+
             <ul className="space-y-4 mb-8 flex-1">
-              {['Unlimited habit tracking', 'Basic contribution graph', '2 AI pattern insights', '3 AI Coach messages'].map((feature, i) => (
+              {[
+                'Unlimited habit tracking',
+                'Basic contribution graph',
+                '2 AI pattern insights',
+                '3 AI Coach messages',
+              ].map((feature, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-500 shrink-0" />
                   <span className="text-gray-700">{feature}</span>
                 </li>
               ))}
             </ul>
-            
-            <button 
-              disabled 
-              className="w-full py-4 rounded-xl font-bold bg-gray-100 text-gray-500 cursor-not-allowed"
+
+            {/* Replace the disabled Basic button with this: */}
+            <button
+              disabled
+              className={`w-full py-4 rounded-xl font-bold cursor-not-allowed transition-colors ${
+                user?.plan !== 'pro'
+                  ? 'bg-gray-100 text-gray-500'
+                  : 'bg-transparent text-gray-400 border border-gray-200'
+              }`}
             >
-              Current Plan
+              {user?.plan !== 'pro' ? 'Current Plan' : 'Basic Tier'}
             </button>
           </div>
 
@@ -73,18 +88,20 @@ export function Pricing() {
 
             <h3 className="text-2xl font-bold text-white mb-2">GrowO Pro</h3>
             <div className="flex items-baseline gap-2 mb-6 text-white">
-              <span className="text-4xl font-extrabold">$9</span>
+              <span className="text-4xl font-extrabold">$4.99</span>
               <span className="text-green-100 font-medium">/ month</span>
             </div>
-            <p className="text-green-100 mb-8">Supercharge your growth with personalized AI coaching.</p>
-            
+            <p className="text-green-100 mb-8">
+              Supercharge your growth with personalized AI coaching.
+            </p>
+
             <ul className="space-y-4 mb-8 flex-1">
               {[
                 'Everything in Basic',
                 'Unlimited AI Pattern Insights',
                 'Unlimited 24/7 AI Growth Coach',
                 'Priority support',
-                'Early access to new features'
+                'Early access to new features',
               ].map((feature, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-200 shrink-0" />
@@ -92,16 +109,24 @@ export function Pricing() {
                 </li>
               ))}
             </ul>
-            
-            <button 
+
+            <button
               onClick={handleUpgrade}
               disabled={isLoading || user?.plan === 'pro'}
-              className="w-full py-4 rounded-xl font-bold bg-white text-green-700 hover:bg-green-50 transition-colors flex items-center justify-center gap-2 shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+              className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
+                user?.plan === 'pro'
+                  ? 'bg-green-800 text-green-100 cursor-default shadow-inner' // Darker green for active state
+                  : 'bg-white text-green-700 hover:bg-green-50 shadow-md hover:shadow-lg hover:-translate-y-0.5'
+              }`}
             >
               {isLoading ? (
-                <><Loader2 className="w-5 h-5 animate-spin" /> Preparing Checkout...</>
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" /> Preparing Checkout...
+                </>
               ) : user?.plan === 'pro' ? (
-                'You are a Pro'
+                <>
+                  <Check className="w-5 h-5" /> Active Plan
+                </>
               ) : (
                 'Upgrade to Pro'
               )}
