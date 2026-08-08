@@ -11,8 +11,15 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  Legend,
 } from 'recharts';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Lock } from 'lucide-react';
+import { UpgradeModal } from '../components/common/UpgradeModel.jsx';
 
 export function Analytics() {
   const { user, logout } = useAuth();
@@ -21,6 +28,14 @@ export function Analytics() {
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState(null);
   const [trendData, setTrendData] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
+  const [streakData, setStreakData] = useState([]);
+  const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
+
+  const isPro = user?.plan === 'pro';
+
+  // Custom colors for our Pie Chart to match the GrowO theme
+  const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#6b7280'];
 
   const handleLogout = async () => {
     await logout();
@@ -64,6 +79,26 @@ export function Analytics() {
           }));
 
           setTrendData(formattedData);
+
+          // Process Category Data for Pie Chart
+          const categoryCounts = {};
+          res.data.habits.forEach((h) => {
+            if (!categoryCounts[h.category]) categoryCounts[h.category] = 0;
+            categoryCounts[h.category] += h.totalCompletions;
+          });
+          const catData = Object.keys(categoryCounts).map((key) => ({
+            name: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize category
+            value: categoryCounts[key],
+          }));
+          setCategoryData(catData);
+
+          // Process Streak Data for Bar Chart
+          const strData = res.data.habits.map((h) => ({
+            name: h.name.length > 12 ? h.name.substring(0, 12) + '...' : h.name, // Truncate long names
+            Best: h.bestStreak,
+            Current: h.currentStreak,
+          }));
+          setStreakData(strData);
         }
       } catch (error) {
         console.error('Failed to fetch analytics', error);
@@ -140,9 +175,117 @@ export function Analytics() {
                 </ResponsiveContainer>
               </div>
             </div>
+            {/* Advanced Charts Grid (PRO Only) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative mt-6">
+              {/* THE FREEMIUM BLUR OVERLAY */}
+              {!isPro && (
+                <div
+                  className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[6px] rounded-2xl border border-gray-100 shadow-sm cursor-pointer hover:bg-white/30 transition-colors"
+                  onClick={() => setIsUpgradeOpen(true)}
+                >
+                  <div className="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm text-center border border-emerald-100 transform transition-transform hover:scale-105">
+                    <div className="bg-emerald-50 w-16 h-16 rounded-full flex items-center justify-center mb-4 shadow-inner">
+                      <Lock className="w-8 h-8 text-emerald-600" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Advanced Analytics</h3>
+                    <p className="text-gray-600 mb-6 leading-relaxed text-sm">
+                      Unlock deep insights into your habit categories and streak comparisons to
+                      optimize your growth.
+                    </p>
+                    <button className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold py-3.5 rounded-xl shadow-md transition-all">
+                      Upgrade to Pro
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Pie Chart: Categories */}
+              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                <h2 className="text-xl font-bold text-gray-800 mb-6">Completions by Category</h2>
+                <div className="h-72 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={categoryData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={90}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {categoryData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={{
+                          borderRadius: '12px',
+                          border: 'none',
+                          boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                        }}
+                      />
+                      <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Bar Chart: Streaks */}
+              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                <h2 className="text-xl font-bold text-gray-800 mb-6">Current vs Best Streaks</h2>
+                <div className="h-72 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={streakData}
+                      margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                      <XAxis
+                        dataKey="name"
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fill: '#6b7280', fontSize: 11 }}
+                        dy={10}
+                      />
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fill: '#9ca3af', fontSize: 12 }}
+                        dx={-10}
+                        allowDecimals={false}
+                      />
+                      <Tooltip
+                        cursor={{ fill: '#f3f4f6' }}
+                        contentStyle={{
+                          borderRadius: '12px',
+                          border: 'none',
+                          boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                        }}
+                      />
+                      <Legend
+                        verticalAlign="top"
+                        height={36}
+                        iconType="circle"
+                        wrapperStyle={{ paddingBottom: '20px' }}
+                      />
+                      <Bar dataKey="Best" fill="#9ca3af" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                      <Bar dataKey="Current" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </main>
+
+      {/* FREEMIUM Upgrade Modal */}
+      <UpgradeModal
+        isOpen={isUpgradeOpen}
+        onClose={() => setIsUpgradeOpen(false)}
+        featureName="Advanced Analytics & Charts"
+      />
     </div>
   );
 }
