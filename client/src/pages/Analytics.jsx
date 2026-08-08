@@ -92,13 +92,12 @@ export function Analytics() {
           }));
           setCategoryData(catData);
 
-          // Process Streak Data for Bar Chart
-          const strData = res.data.habits.map((h) => ({
-            name: h.name.length > 12 ? h.name.substring(0, 12) + '...' : h.name, // Truncate long names
-            Best: h.bestStreak,
-            Current: h.currentStreak,
+          // Process Total Completions Data for Bar Chart
+          const completionsData = res.data.habits.map((h) => ({
+            name: h.name.length > 12 ? h.name.substring(0, 12) + '...' : h.name,
+            Completions: h.totalCompletions,
           }));
-          setStreakData(strData);
+          setStreakData(completionsData); // We'll keep the same state name for simplicity
         }
       } catch (error) {
         console.error('Failed to fetch analytics', error);
@@ -231,9 +230,11 @@ export function Analytics() {
                 </div>
               </div>
 
-              {/* Bar Chart: Streaks */}
+              {/* Bar Chart: Total Completions */}
               <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                <h2 className="text-xl font-bold text-gray-800 mb-6">Current vs Best Streaks</h2>
+                <h2 className="text-xl font-bold text-gray-800 mb-6">
+                  Total Completions per Habit
+                </h2>
                 <div className="h-72 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
@@ -263,14 +264,13 @@ export function Analytics() {
                           boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
                         }}
                       />
-                      <Legend
-                        verticalAlign="top"
-                        height={36}
-                        iconType="circle"
-                        wrapperStyle={{ paddingBottom: '20px' }}
+                      {/* Only one bar now, showing total lifetime completions! */}
+                      <Bar
+                        dataKey="Completions"
+                        fill="#10b981"
+                        radius={[4, 4, 0, 0]}
+                        maxBarSize={60}
                       />
-                      <Bar dataKey="Best" fill="#9ca3af" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                      <Bar dataKey="Current" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={40} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
