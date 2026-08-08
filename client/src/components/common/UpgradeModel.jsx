@@ -65,10 +65,12 @@ export function UpgradeModal({ isOpen, onClose, featureName = 'This feature' }) 
             disabled={isLoading}
             className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md hover:shadow-lg flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Upgrade Now for $9/mo'}
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Upgrade Now for $4.99/mo'}
           </button>
 
-          <p className="text-center text-xs text-gray-400 mt-4">Secure payment powered by Lemon Squeezy</p>
+          <p className="text-center text-xs text-gray-400 mt-4">
+            Secure payment powered by Lemon Squeezy
+          </p>
         </div>
       </div>
     </div>

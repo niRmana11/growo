@@ -1,11 +1,25 @@
 import Habit from '../models/Habit.js';
 import HabitLog from '../models/HabitLog.js';
+import User from '../models/User.js';
 import { calculateGlobalStreak } from '../services/streak.service.js';
 
 // Create new habit
 export const createHabit = async (req, res) => {
   try {
     const { name, description, category, icon } = req.body;
+
+    // SECURE FREEMIUM CHECK: limit to 5 habits for free users
+    const user = await User.findById(req.userId);
+    if (user.plan !== 'pro') {
+      const habitCount = await Habit.countDocuments({ userId: req.userId });
+
+      if (habitCount >= 5) {
+        return res.status(403).json({
+          success: false,
+          message: 'Free plan is limited to 5 habits. Upgrade to Pro for unlimited habits',
+        });
+      }
+    }
 
     if (!name) {
       return res.status(400).json({
