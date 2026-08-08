@@ -1,6 +1,9 @@
-import React from 'react';
-
-export function ContributionGraph({ logDates = [], totalHabits = 0, userCreatedAt }) {
+export function ContributionGraph({
+  logDates = [],
+  totalHabits = 0,
+  userCreatedAt,
+  className = '',
+}) {
   const days = [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -49,20 +52,26 @@ export function ContributionGraph({ logDates = [], totalHabits = 0, userCreatedA
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-      <h3 className="text-lg font-bold text-gray-900 mb-4">30-Day Activity Heatmap</h3>
+    <div
+      className={`bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 ${className}`}
+    >
+      {/* 1. Title at the top */}
+      <h3 className="text-xl font-bold text-gray-800 mb-4">30-Day Activity Heatmap</h3>
 
-      <div className="flex flex-wrap gap-1.5 md:gap-2">
-        {days.map((day, idx) => (
-          <div
-            key={idx}
-            title={`${day.date.toDateString()}: ${day.date < joinedDate ? 'Before Joined' : day.count + ' habits completed'}`}
-            // CHANGED: Removed cursor-help, added cursor-default so no question mark appears!
-            className={`w-6 h-6 md:w-8 md:h-8 rounded-[4px] transition-colors cursor-default hover:opacity-80 ${day.colorClass}`}
-          />
-        ))}
+      {/* 2. Squares perfectly centered in the remaining space */}
+      <div className="flex-1 flex flex-col justify-center">
+        <div className="flex flex-wrap gap-1.5 md:gap-2">
+          {days.map((day, idx) => (
+            <div
+              key={idx}
+              title={`${day.date.toDateString()}: ${day.date < joinedDate ? 'Before Joined' : day.count + ' habits completed'}`}
+              className={`w-6 h-6 md:w-8 md:h-8 rounded-[4px] transition-colors cursor-default hover:opacity-80 ${day.colorClass}`}
+            />
+          ))}
+        </div>
       </div>
 
+      {/* 3. Legend at the bottom */}
       <div className="mt-4 flex gap-3 text-xs font-medium items-center text-gray-500">
         <span>Empty</span>
         <div className="w-3.5 h-3.5 bg-slate-500 rounded-[3px]"></div>

@@ -20,6 +20,7 @@ import {
 } from 'recharts';
 import { Loader2, Lock } from 'lucide-react';
 import { UpgradeModal } from '../components/common/UpgradeModel.jsx';
+import { ContributionGraph } from '../components/dashboard/ContributionGraph.jsx';
 
 export function Analytics() {
   const { user, logout } = useAuth();
@@ -125,55 +126,72 @@ export function Analytics() {
           </div>
         ) : (
           <div className="space-y-6 animate-in fade-in duration-500">
-            {/* Free Tier Chart: 30-Day Trend */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-              <h2 className="text-xl font-bold text-gray-800 mb-6">30-Day Completion Trend</h2>
-              <div className="h-72 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="colorCompletions" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-                    <XAxis
-                      dataKey="date"
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fill: '#9ca3af', fontSize: 12 }}
-                      dy={10}
-                      minTickGap={20}
-                    />
-                    <YAxis
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fill: '#9ca3af', fontSize: 12 }}
-                      dx={-10}
-                      allowDecimals={false}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        borderRadius: '12px',
-                        border: 'none',
-                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                      }}
-                      cursor={{ stroke: '#10b981', strokeWidth: 1, strokeDasharray: '4 4' }}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="completions"
-                      name="Habits Completed"
-                      stroke="#10b981"
-                      strokeWidth={3}
-                      fillOpacity={1}
-                      fill="url(#colorCompletions)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+            {/* TOP ROW GRID (Free Tier) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Left Side: 30-Day Trend (Takes up 2/3 width) */}
+              <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <h2 className="text-xl font-bold text-gray-800 mb-6">30-Day Completion Trend</h2>
+                <div className="h-72 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart
+                      data={trendData}
+                      margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                    >
+                      <defs>
+                        <linearGradient id="colorCompletions" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                      <XAxis
+                        dataKey="date"
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fill: '#9ca3af', fontSize: 12 }}
+                        dy={10}
+                        minTickGap={20}
+                      />
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fill: '#9ca3af', fontSize: 12 }}
+                        dx={-10}
+                        allowDecimals={false}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          borderRadius: '12px',
+                          border: 'none',
+                          boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                        }}
+                        cursor={{ stroke: '#10b981', strokeWidth: 1, strokeDasharray: '4 4' }}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="completions"
+                        name="Habits Completed"
+                        stroke="#10b981"
+                        strokeWidth={3}
+                        fillOpacity={1}
+                        fill="url(#colorCompletions)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Right Side: Heatmap (Takes up 1/3 width) */}
+              <div className="lg:col-span-1 h-full">
+                <ContributionGraph
+                  logDates={stats.recentLogs}
+                  totalHabits={stats.totalHabits}
+                  userCreatedAt={user?.createdAt}
+                  className="h-full flex flex-col justify-center"
+                />
               </div>
             </div>
+
             {/* Advanced Charts Grid (PRO Only) */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative mt-6">
               {/* THE FREEMIUM BLUR OVERLAY */}
