@@ -19,6 +19,21 @@ export function Navbar({ user, onLogout }) {
                 <span className="text-gray-900"> every day.</span>
               </p>
             </Link>
+            {/* Navigation Links */}
+            <nav className="hidden md:flex items-center gap-6 ml-4">
+              <Link
+                to="/dashboard"
+                className="text-gray-600 hover:text-green-600 font-medium transition-colors"
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/analytics"
+                className="text-gray-600 hover:text-green-600 font-medium transition-colors"
+              >
+                Analytics
+              </Link>
+            </nav>
           </div>
 
           {/* Right side */}
