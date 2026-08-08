@@ -26,6 +26,7 @@ export function Coach() {
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
 
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Auto-scroll to bottom of chat
   const scrollToBottom = () => {
@@ -35,6 +36,13 @@ export function Coach() {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isLoading]);
+
+  // automatically put the cursor back in the input box when AI finishes typing
+  useEffect(() => {
+    if (!isLoading && !isGated && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isLoading, isGated]);
 
   const handleLogout = async () => {
     await logout();
@@ -175,6 +183,7 @@ export function Coach() {
           <div className="p-4 bg-white border-t border-gray-100">
             <form onSubmit={handleSend} className="flex gap-2 relative">
               <input
+                ref={inputRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
