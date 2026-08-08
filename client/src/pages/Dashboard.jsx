@@ -20,6 +20,7 @@ import { TodayProgress } from '../components/dashboard/TodayProgress.jsx';
 import { ContributionGraph } from '../components/dashboard/ContributionGraph.jsx';
 import { AIDrawer } from '../components/ai/AIDrawer.jsx';
 import { ConfirmDeleteModal } from '../components/habits/ConfirmDeleteModal.jsx';
+import { UpgradeModal } from '../components/common/UpgradeModel.jsx';
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -44,6 +45,7 @@ export function Dashboard() {
   const [stats, setStats] = useState({ totalHabits: 0, maxStreak: 0, totalCompletions: 0 });
   const [globalStats, setGlobalStats] = useState({ currentStreak: 0, maxStreak: 0, logDates: [] });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
 
   // Load habits on mount
   useEffect(() => {
@@ -77,6 +79,11 @@ export function Dashboard() {
 
   // Open create modal
   const openCreateModal = () => {
+    // FREE user limit: Max 5 habits
+    if (user?.plan !== 'pro' && habits.length >= 5) {
+      setUpgradeModalOpen(true);
+      return; // stop them from opening the create modal
+    }
     setModalMode('create');
     setEditingHabit(null);
     setModalOpen(true);
@@ -292,6 +299,13 @@ export function Dashboard() {
         onClose={() => setHabitToDelete(null)}
         onConfirm={confirmDelete}
         itemName={habitToDelete?.name}
+      />
+
+      {/* FREEMIUM: upgrade modal */}
+      <UpgradeModal
+        isOpen={upgradeModalOpen}
+        onClose={() => setUpgradeModalOpen(false)}
+        featureName="Tracking more than 5 habits"
       />
 
       {/* The AI Drawer */}
