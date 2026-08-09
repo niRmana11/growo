@@ -19,8 +19,25 @@ export function HabitList({ habits, isLoading, onMarkComplete, onEdit, onDelete,
   const filteredHabits =
     filter === 'all' ? habits : habits.filter((habit) => habit.category === filter);
 
-  // Sort by current streak (highest first)
-  const sortedHabits = [...filteredHabits].sort((a, b) => b.currentStreak - a.currentStreak);
+  const today = new Date().toDateString();
+
+  // Sort: Incomplete first, then completed. If same status, sort by highest current streak.
+  const sortedHabits = [...filteredHabits].sort((a, b) => {
+    const aCompleted = a.lastCompletedAt
+      ? new Date(a.lastCompletedAt).toDateString() === today
+      : false;
+    const bCompleted = b.lastCompletedAt
+      ? new Date(b.lastCompletedAt).toDateString() === today
+      : false;
+
+    // If both are incomplete (or both are complete), sort by highest streak
+    if (aCompleted === bCompleted) {
+      return b.currentStreak - a.currentStreak;
+    }
+
+    // Otherwise, push the completed one to the bottom
+    return aCompleted ? 1 : -1;
+  });
 
   if (habits.length === 0) {
     return (

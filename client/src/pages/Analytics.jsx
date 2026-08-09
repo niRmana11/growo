@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth.js';
 import { Navbar } from '../components/layout/Navbar.jsx';
+import { Footer } from '../components/layout/Footer.jsx';
 import { useNavigate } from 'react-router-dom';
 import { getHabitStats } from '../services/habitService.js';
 import {
@@ -129,7 +130,7 @@ export function Analytics() {
             {/* TOP ROW GRID (Free Tier) */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left Side: 30-Day Trend (Takes up 2/3 width) */}
-              <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <h2 className="text-xl font-bold text-gray-800 mb-6">30-Day Completion Trend</h2>
                 <div className="h-72 w-full">
                   <ResponsiveContainer width="100%" height="100%">
@@ -217,7 +218,7 @@ export function Analytics() {
               )}
 
               {/* Pie Chart: Categories */}
-              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <h2 className="text-xl font-bold text-gray-800 mb-6">Completions by Category</h2>
                 <div className="h-72 w-full">
                   <ResponsiveContainer width="100%" height="100%">
@@ -249,7 +250,7 @@ export function Analytics() {
               </div>
 
               {/* Bar Chart: Total Completions */}
-              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <h2 className="text-xl font-bold text-gray-800 mb-6">
                   Total Completions per Habit
                 </h2>
@@ -297,6 +298,8 @@ export function Analytics() {
           </div>
         )}
       </main>
+
+      <Footer />
 
       {/* FREEMIUM Upgrade Modal */}
       <UpgradeModal

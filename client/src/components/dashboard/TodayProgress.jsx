@@ -16,7 +16,7 @@ export function TodayProgress({ habits }) {
   const progressPercentage = total === 0 ? 0 : Math.round((completed / total) * 100);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+    <div className="bg-white hover:bg-emerald-50 border border-gray-200 rounded-lg p-6 mb-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
       <div className="flex justify-between items-end mb-2">
         <div>
           <h3 className="text-lg font-bold text-gray-900">Today's Progress</h3>

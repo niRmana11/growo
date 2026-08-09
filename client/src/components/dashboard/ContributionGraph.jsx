@@ -25,14 +25,21 @@ export function ContributionGraph({
     // 1. If this date was BEFORE the user created their account, make it neutral gray
     if (date < joinedDate) return 'bg-slate-100';
 
-    // 2. Fixed thresholds (No more percentages!)
+    // if they missed the day entirely
     if (count === 0) return 'bg-red-500';
-    if (count === 1) return 'bg-green-100';
-    if (count === 2) return 'bg-green-200';
-    if (count === 3) return 'bg-green-300';
-    if (count === 4) return 'bg-green-400';
-    if (count === 5) return 'bg-green-500';
-    return 'bg-green-600'; // 4 or more habits is max green!
+
+    // prevent division by zero if they haven't created any habits yet
+    if (totalHabits === 0) return 'bg-green-100';
+
+    const percentage = count / totalHabits;
+
+    if (percentage >= 1) return 'bg-green-600'; // 100% (Perfect Day!)
+    if (percentage >= 0.8) return 'bg-green-500'; // 80% - 99%
+    if (percentage >= 0.6) return 'bg-green-400'; // 60% - 79%
+    if (percentage >= 0.4) return 'bg-green-300'; // 40% - 59%
+    if (percentage >= 0.2) return 'bg-green-200'; // 20% - 39%
+
+    return 'bg-green-100'; // Less than 20%
   };
 
   for (let i = 29; i >= 0; i--) {
@@ -53,7 +60,7 @@ export function ContributionGraph({
 
   return (
     <div
-      className={`bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 ${className}`}
+      className={`bg-white hover:bg-emerald-50 border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ${className}`}
     >
       {/* 1. Title at the top */}
       <h3 className="text-xl font-bold text-gray-800 mb-4">30-Day Activity Heatmap</h3>

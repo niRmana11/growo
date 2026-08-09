@@ -236,7 +236,7 @@ export function Dashboard() {
 
             {/* Stats cards (Stacked vertically) */}
             <div className="flex flex-col gap-4">
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <div className="bg-white hover:bg-emerald-50 border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 text-sm">Total Habits</p>
@@ -248,7 +248,7 @@ export function Dashboard() {
                 </div>
               </div>
 
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <div className="bg-white hover:bg-emerald-50 border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 text-sm">Best Streak</p>
@@ -263,7 +263,7 @@ export function Dashboard() {
                 </div>
               </div>
 
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <div className="bg-white hover:bg-emerald-50 border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 text-sm">Completions</p>

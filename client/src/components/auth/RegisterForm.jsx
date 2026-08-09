@@ -1,17 +1,15 @@
 import { useState } from 'react';
+import { User, Mail, Lock, ArrowRight } from 'lucide-react'; // Premium icons!
 
-// Register form component - renders email/password/name fields with validation
 export const RegisterForm = ({ onSubmit, error, isLoading }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  // Validate password when user types
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
-
     if (value.length < 6 && value.length > 0) {
       setPasswordError('Password must be at least 6 characters');
     } else {
@@ -21,91 +19,109 @@ export const RegisterForm = ({ onSubmit, error, isLoading }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate all fields are filled
-    if (!email || !password || !name) {
-      return;
-    }
-
-    // Validate password is long enough
+    if (!email || !password || !name) return;
     if (password.length < 6) {
       setPasswordError('Password must be at least 6 characters');
       return;
     }
-
-    // Call the onSubmit callback with all fields
     await onSubmit(email, password, name);
   };
 
-  // Check if form is valid
   const isFormValid = email && password && name && password.length >= 6;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {/* Name input */}
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className="space-y-1.5">
+        <label htmlFor="name" className="block text-sm font-bold text-gray-700">
           Full Name
         </label>
-        <input
-          id="name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          disabled={isLoading}
-          placeholder="Your Name"
-          required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100"
-        />
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <User className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            disabled={isLoading}
+            placeholder="Your Name"
+            required
+            className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-gray-50 hover:bg-white focus:bg-white disabled:opacity-50"
+          />
+        </div>
       </div>
 
       {/* Email input */}
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-          Email
+      <div className="space-y-1.5">
+        <label htmlFor="email" className="block text-sm font-bold text-gray-700">
+          Email Address
         </label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          disabled={isLoading}
-          placeholder="you@example.com"
-          required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100"
-        />
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <Mail className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading}
+            placeholder="you@example.com"
+            required
+            className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-gray-50 hover:bg-white focus:bg-white disabled:opacity-50"
+          />
+        </div>
       </div>
 
-      {/* Password input with validation */}
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-          Password (min 6 characters)
+      {/* Password input */}
+      <div className="space-y-1.5">
+        <label htmlFor="password" className="block text-sm font-bold text-gray-700">
+          Password
         </label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-          disabled={isLoading}
-          placeholder="••••••"
-          required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100"
-        />
-        {passwordError && <p className="text-yellow-600 text-sm mt-1">{passwordError}</p>}
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <Lock className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            disabled={isLoading}
+            placeholder="••••••••"
+            required
+            className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-gray-50 hover:bg-white focus:bg-white disabled:opacity-50"
+          />
+        </div>
+        {passwordError && (
+          <p className="text-amber-500 text-sm font-medium pt-1 px-1">{passwordError}</p>
+        )}
       </div>
 
-      {/* Server error message */}
-      {error && <div className="text-red-500 text-sm">{error}</div>}
+      {/* Error message */}
+      {error && (
+        <div className="p-3 bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl font-medium text-center">
+          {error}
+        </div>
+      )}
 
       {/* Submit button */}
-      <button type="submit" disabled={isLoading || !isFormValid} className="w-full btn-primary">
-        {isLoading ? 'Creating account...' : 'Create Account'}
+      <button
+        type="submit"
+        disabled={isLoading || !isFormValid}
+        className="w-full bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold py-3.5 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:transform-none disabled:shadow-none mt-2"
+      >
+        {isLoading ? (
+          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        ) : (
+          <>
+            Create Account
+            <ArrowRight className="w-5 h-5" />
+          </>
+        )}
       </button>
-
-      {/* Helper text */}
-      <p className="text-sm text-gray-600 text-center">
-        Password will be securely hashed on the server
-      </p>
     </form>
   );
 };
