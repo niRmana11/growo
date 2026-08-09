@@ -31,7 +31,7 @@ export const Login = () => {
             <img
               src={growoLogoFull}
               alt="GrowO Logo"
-              className="h-20 w-auto mx-auto mb-4 drop-shadow-sm"
+              className="h-20 w-auto mx-auto drop-shadow-sm"
             />
           </Link>
           <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Welcome Back</h1>
