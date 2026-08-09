@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { RegisterForm } from '../components/auth/RegisterForm';
 import { useAuth } from '../hooks/useAuth';
 import growoLogoFull from '../assets/growo-logo-full.png';
+import { ArrowLeft } from 'lucide-react';
+import { FloatingBackground } from '../components/common/FloatingBackground';
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -23,8 +25,21 @@ export const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50/50 to-green-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center p-4 relative">
+      {/* 1. The Animated Background */}
+      <FloatingBackground />
+
+      {/* 2. The Back Button */}
+      <Link
+        to="/"
+        className="absolute top-6 left-6 z-20 text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-2 transition-transform hover:-translate-x-1 bg-white/70 px-4 py-2 rounded-full backdrop-blur-md border border-emerald-100 shadow-sm"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Back to Home
+      </Link>
+
+      {/* 3. The Main Content */}
+      <div className="w-full max-w-md relative z-10">
         {/* Logo and Header */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-block transition-transform hover:scale-105">
