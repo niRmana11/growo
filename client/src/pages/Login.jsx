@@ -1,57 +1,56 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { LoginForm } from '../components/auth/LoginForm';
 import { useAuth } from '../hooks/useAuth';
+import growoLogoFull from '../assets/growo-logo-full.png'; // Added Logo!
 
-// Login page - renders login form and handles authentication
 export const Login = () => {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading, error, login } = useAuth();
 
-  // If already logged in, redirect to dashboard
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
 
-  // Handle form submission
   const handleLogin = async (email, password) => {
     try {
       await login(email, password);
-      // Redirect happens via useEffect when isAuthenticated changes
     } catch (err) {
-      // Error already in store, displayed by form
       console.error('Login failed:', err);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F9FDF4] to-[#E2F4CC] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50/50 to-green-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
+        {/* Logo and Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2">
-            <span className="text-[#0D1117]">Grow</span>
-            <span className="text-[#7ED957]">O</span>
-          </h1>
-          <p className="text-gray-600">Welcome back</p>
+          <Link to="/" className="inline-block transition-transform hover:scale-105">
+            <img
+              src={growoLogoFull}
+              alt="GrowO Logo"
+              className="h-20 w-auto mx-auto mb-4 drop-shadow-sm"
+            />
+          </Link>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Welcome Back</h1>
+          <p className="text-gray-500 font-medium">Continue your growth journey today.</p>
         </div>
 
-        {/* Login form card */}
-        <div className="card">
+        {/* Premium Glass Login Card */}
+        <div className="bg-white/80 backdrop-blur-xl border border-white/60 p-8 rounded-3xl shadow-2xl">
           <LoginForm onSubmit={handleLogin} error={error} isLoading={isLoading} />
 
-          {/* Link to register */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+          <div className="mt-8 text-center border-t border-gray-100 pt-6">
+            <p className="text-sm text-gray-600 font-medium">
               Don't have an account?{' '}
-              <button
-                onClick={() => navigate('/register')}
-                className="text-[#7ED957] font-semibold hover:underline"
+              <Link
+                to="/register"
+                className="font-bold text-emerald-600 hover:text-emerald-700 hover:underline transition-all"
               >
-                Sign up
-              </button>
+                Sign up for free
+              </Link>
             </p>
           </div>
         </div>
