@@ -60,7 +60,7 @@ export function ContributionGraph({
 
   return (
     <div
-      className={`bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ${className}`}
+      className={`bg-white hover:bg-emerald-50 border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ${className}`}
     >
       {/* 1. Title at the top */}
       <h3 className="text-xl font-bold text-gray-800 mb-4">30-Day Activity Heatmap</h3>

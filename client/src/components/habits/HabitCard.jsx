@@ -27,7 +27,7 @@ export function HabitCard({ habit, onMarkComplete, onEdit, onDelete, onReset, is
   const icon = getHabitIcon(habit.icon);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+    <div className="bg-white hover:bg-emerald-50 border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
       {/* HEADER */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3 flex-1">
